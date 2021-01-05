@@ -1,5 +1,6 @@
 import { Component } from "react";
-import { axios } from "axios";
+import { Link } from "react-router-dom";
+import axios from "./axios";
 
 //1. render 4 input fields, button, and the error message if there is one
 //2. change handler the store user's input in state as they type
@@ -15,18 +16,22 @@ import { axios } from "axios";
 export default class Registration extends Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            first: null,
+            last: null,
+            email: null,
+            password: null,
+            error: false,
+        };
     }
 
     handleChange(evt) {
-        console.log("handle change is running!");
-        console.log("event object: ", evt);
-        console.log("evt.target.value: ", evt.target.value);
-        console.log("evt.target.name: ", evt.target.name);
-        //take the user input and store it in state
-        // it has to be a Object with four coresponding properties:
-        // first, last, email, password
-        // two things are needed: 1.what is the user typing (evt.target.value) and 2.which input field is user typing in (evt.target.name)
+        // console.log("event object: ", evt);
+        // console.log("evt.target.value: ", evt.target.value);
+        // console.log("evt.target.name: ", evt.target.name);
+        //take the user input and store it in state. Two things are needed:
+        // 1.what is the user typing (evt.target.value) and
+        // 2.which input field is user typing in (evt.target.name)
         this.setState({
             // evt.target.name needs to be the property
             // square brackets syntax is needed to inform that the property is a js. value!
@@ -43,12 +48,26 @@ export default class Registration extends Component {
         // (1) put something in state that indicates that there is an error. like error: true;
         // (2) render the error message only if there is an error - we are going to use the conditional rendering option here
         // - success: redirect user to / using /: location.replace('/');
+        console.log("handle click fired", this.state);
+        axios
+            .post("/register", this.state)
+            .then((res) => {
+                if (!res.data.success) {
+                    this.setState({ error: true });
+                } else {
+                    location.replace("/");
+                }
+            })
+            .catch((err) => {
+                console.log("POST /register error", err);
+            });
     }
-
     render() {
         return (
             <div>
-                {this.state.error && <p>Error :( </p>}
+                {this.state.error && (
+                    <p>Something went wrong :( please try again </p>
+                )}
                 <h1>Registration</h1>
                 <input
                     onChange={(evt) => this.handleChange(evt)}
@@ -75,10 +94,12 @@ export default class Registration extends Component {
                     onChange={(evt) => this.handleChange(evt)}
                     name="password"
                     placeholder="password"
-                    type="text"
+                    type="password"
                     required
                 />
                 <button onClick={() => this.handleClick()}>Submit</button>
+                <p>I have an account</p>
+                <Link to="/login">Click here to Log in!</Link>
             </div>
         );
     }

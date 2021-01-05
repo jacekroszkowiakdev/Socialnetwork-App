@@ -1,7 +1,7 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(
     process.env.DATABASE_URL ||
-        `postgres:postgres:postgres@localhost:5432/petitiondb`
+        `postgres:postgres:postgres@localhost:5432/socialnetworkdb`
 );
 
 module.exports.registerUser = (first, last, email, hashedPassword) => {
@@ -9,4 +9,8 @@ module.exports.registerUser = (first, last, email, hashedPassword) => {
     VALUES ($1, $2, $3, $4) RETURNING id`;
     const params = [first, last, email, hashedPassword];
     return db.query(q, params);
+};
+
+module.exports.checkForUserEmail = (email) => {
+    return db.query("SELECT password, id FROM users WHERE email = $1", [email]);
 };

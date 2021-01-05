@@ -7,7 +7,9 @@ let element;
 if (location.pathname === "/welcome") {
     element = <Welcome />;
 } else {
-    element = <p>home page!!</p>;
+    element = (
+        <img src="so_social.jpg" alt="social media logo" className="logo" />
+    );
 }
 
 // ReactDOM is the function that does render the React
