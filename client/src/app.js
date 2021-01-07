@@ -1,4 +1,4 @@
-// client/stc/app.js
+// client/src/app.js
 import { Component } from "react";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
@@ -24,7 +24,12 @@ export default class App extends Component {
         // once we get a response from axios, store that data in the state of App
     }
     logout() {
-        axios.get("/logout").then(() => location.replace("/welcome"));
+        axios
+            .get("/logout")
+            .then(() => location.replace("/welcome"))
+            .catch((err) => {
+                console.log("GET /logout error", err);
+            });
     }
     toggleUploader() {
         console.log("toggle uploader fired!");

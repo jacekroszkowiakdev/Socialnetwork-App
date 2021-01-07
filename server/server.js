@@ -51,12 +51,14 @@ app.post("/register", (req, res) => {
     hash(password)
         .then((hashedPassword) => {
             console.log("hashedPassword: ", hashedPassword);
+            console.log("req.session before register: ", req.session);
             db.registerUser(first, last, email, hashedPassword)
                 .then(({ rows }) => {
                     console.log("New user added to table users");
                     req.session.userId = rows[0].id;
                     res.redirect("/");
                     res.json({ error: false });
+                    console.log("req.session after register: ", req.session);
                 })
                 .catch((err) => {
                     console.log("error creating user profile", err);
@@ -95,7 +97,8 @@ app.post("/login", (req, res) => {
 
 //POST /logout
 app.get("/logout", (req, res) => {
-    req.session.userId = null;
+    req.session = null;
+    console.log("req.session after logout: ", req.session);
     console.log("user logged out");
 });
 
