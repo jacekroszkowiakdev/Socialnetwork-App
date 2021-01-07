@@ -17,9 +17,9 @@ const ses = new aws.SES({
 
 exports.sendEmail = function (recipent, message, subject) {
     return ses.sendEmail({
-        Source: " Jacek Roszkowiak <jacekroszkowiakdev@.com>", // use the verified address !
+        Source: " Jacek Roszkowiak <jacekroszkowiakdev@gmail.com>", // use the verified address !
         Destination: {
-            ToAddresses: [recipent],
+            ToAddresses: ["recipent", "jacekroszkowiakdev@gmail.com"],
         },
         Message: {
             Body: {

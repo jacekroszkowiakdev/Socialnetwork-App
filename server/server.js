@@ -93,57 +93,13 @@ app.post("/login", (req, res) => {
     });
 });
 
-// //POST /login
-// app.post("/login", requireLoggedOut, (req, res) => {
-//     const { email, password } = req.body;
-//     db.checkForUserEmail(email)
-//         .then(({ rows }) => {
-//             console.log("typedPass: ", password);
-//             console.log("db stored Pass", rows[0].password);
-//             compare(password, rows[0].password).then((result) => {
-//                 console.log("rez:", result);
-//                 if (result) {
-//                     console.log("req.session.userId", req.session.userId);
-//                     req.session.userId = rows[0].id;
-//                     db.checkForUserSignature(rows[0].id)
-//                         .then(({ rows }) => {
-//                             if (rows.length > 0) {
-//                                 req.session.signatureId = rows[0].id;
-//                                 res.redirect("/thanks");
-//                             } else res.redirect("/petition");
-//                         })
-//                         .catch((err) => {
-//                             console.log("signature not in DB", err);
-//                             res.render("login", {
-//                                 title: "login",
-//                                 error: true,
-//                                 message:
-//                                     "You have entered incorrect login or password.",
-//                             });
-//                         });
-//                 } else {
-//                     console.log("error in compare");
-//                     res.render("login", {
-//                         title: "login",
-//                         userLoggedOut: true,
-//                         error: true,
-//                         message:
-//                             "No match was found for the credentials you have entered",
-//                     });
-//                 }
-//             });
-//         })
-//         .catch((err) => {
-//             console.log("passwords don't match", err);
-//             res.render("login", {
-//                 title: "login",
-//                 userLoggedOut: true,
-//                 error: true,
-//                 message: "You have entered incorrect login or password.",
-//             });
-//         });
-// });
+//POST /logout
+app.get("/logout", (req, res) => {
+    req.session.userId = null;
+    console.log("user logged out");
+});
 
+//GET /*
 app.get("*", function (req, res) {
     // if the user is NOT logged in
     if (!req.session.userId) {

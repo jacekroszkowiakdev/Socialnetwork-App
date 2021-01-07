@@ -14,3 +14,8 @@ module.exports.registerUser = (first, last, email, hashedPassword) => {
 module.exports.checkForUserEmail = (email) => {
     return db.query("SELECT password, id FROM users WHERE email = $1", [email]);
 };
+
+module.exports.verifySecret = (email, code, created_at) => {
+    return db.query(`SELECT * FROM codes
+WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`);
+};
