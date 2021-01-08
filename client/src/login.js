@@ -1,6 +1,7 @@
 //client/src/login.js
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import Reset from "./reset";
 import axios from "./axios";
 
 export default class Login extends Component {
@@ -23,7 +24,7 @@ export default class Login extends Component {
             .post("/login", this.state)
             .then((res) => {
                 if (!res.data.success) {
-                    console.log("error in axios");
+                    // console.log("error in axios");
                     this.setState({ error: true });
                 } else {
                     location.replace("/");
@@ -59,7 +60,7 @@ export default class Login extends Component {
                 <p>Not a registered user? Create an account</p>
                 <Link to="/">Register!</Link>
                 <p>Forgot your password?</p>
-                {/* <Link to="/reset">Reset password</Link> */}
+                <Link to="/reset">Reset password</Link>
             </div>
         );
     }

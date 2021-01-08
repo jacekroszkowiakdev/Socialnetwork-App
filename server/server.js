@@ -7,7 +7,7 @@ const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
 const cryptoRandomString = require("crypto-random-string");
-// add SES!!!
+const ses = require("./ses");
 
 // Middleware:
 app.use(

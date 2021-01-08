@@ -3,6 +3,7 @@ import { Component } from "react";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+import Reset from "./reset";
 import axios from "./axios";
 // import { BrowserRouter }
 
@@ -64,25 +65,19 @@ export default class App extends Component {
         console.log("this.state.first: ", this.state.first);
         console.log("this.state.last: ", this.state.last);
         return (
-            <BrowserRouter>
-                <div>
-                    <h1>App component</h1>
-                    <button className="logout" onClick={() => this.logout()}>
-                        Logout
-                    </button>
+            <div>
+                <h1>App component</h1>
+                <button className="logout" onClick={() => this.logout()}>
+                    Logout
+                </button>
 
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                    />
-                    <h2 onClick={() => this.toggleUploader()}></h2>
-                    {this.state.uploaderIsVisible && (
-                        <Uploader setImage={this.setImage} />
-                    )}
-
-                    <Profile />
-                </div>
-            </BrowserRouter>
+                <ProfilePic first={this.state.first} last={this.state.last} />
+                <h2 onClick={() => this.toggleUploader()}></h2>
+                {this.state.uploaderIsVisible && (
+                    <Uploader setImage={this.setImage} />
+                )}
+                <Profile />
+            </div>
         );
     }
 }
