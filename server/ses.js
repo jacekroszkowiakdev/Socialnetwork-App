@@ -19,7 +19,7 @@ exports.sendEmail = function (recipent, message, subject) {
     return ses.sendEmail({
         Source: " Jacek Roszkowiak <jacekroszkowiakdev@gmail.com>", // use the verified address !
         Destination: {
-            ToAddresses: ["recipent", "jacekroszkowiakdev@gmail.com"],
+            ToAddresses: [recipent],
         },
         Message: {
             Body: {

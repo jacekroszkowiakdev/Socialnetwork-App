@@ -1,16 +1,21 @@
 //client/src/login.js
-import { Link } from "react-router-dom";
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import axios from "./axios";
 
 export default class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             email: null,
             password: null,
             error: false,
         };
+    }
+    handleChange(evt) {
+        this.setState({
+            [evt.target.name]: evt.target.value,
+        });
     }
     handleClick() {
         console.log("handle click fired", this.state);
@@ -18,6 +23,7 @@ export default class Login extends Component {
             .post("/login", this.state)
             .then((res) => {
                 if (!res.data.success) {
+                    console.log("error in axios");
                     this.setState({ error: true });
                 } else {
                     location.replace("/");
@@ -33,25 +39,27 @@ export default class Login extends Component {
             <div>
                 <h1>Login</h1>
                 {this.state.error && (
-                    <p>Something went wrong :( please try again</p>
+                    <p>Something went wrong please try again</p>
                 )}
                 <input
                     onChange={(evt) => this.handleChange(evt)}
-                    type="text"
                     name="email"
-                    placeholder="Email"
+                    placeholder="email address"
+                    type="text"
+                    required
                 />
                 <input
                     onChange={(evt) => this.handleChange(evt)}
+                    name="password"
+                    placeholder="password"
                     type="password"
-                    name="pw"
-                    placeholder="Password"
+                    required
                 />
                 <button onClick={() => this.handleClick()}>Login</button>
                 <p>Not a registered user? Create an account</p>
                 <Link to="/">Register!</Link>
                 <p>Forgot your password?</p>
-                <Link to="/reset-password">Reset password</Link>
+                {/* <Link to="/reset">Reset password</Link> */}
             </div>
         );
     }

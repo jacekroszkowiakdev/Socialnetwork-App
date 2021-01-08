@@ -26,7 +26,10 @@ export default class App extends Component {
     logout() {
         axios
             .get("/logout")
-            .then(() => location.replace("/welcome"))
+            .then((res) => {
+                console.log("user logged out");
+                location.replace("/welcome");
+            })
             .catch((err) => {
                 console.log("GET /logout error", err);
             });
@@ -61,8 +64,11 @@ export default class App extends Component {
         console.log("this.state.last: ", this.state.last);
         return (
             <div>
-                <h1>App</h1>
-                <button onClick={() => this.logout()}>logout</button>
+                <h1>App component</h1>
+                <button className="logout" onClick={() => this.logout()}>
+                    logout
+                </button>
+
                 <ProfilePic first={this.state.first} last={this.state.last} />
                 <h2 onClick={() => this.toggleUploader()}></h2>
                 {this.state.uploaderIsVisible && (

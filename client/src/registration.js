@@ -37,7 +37,6 @@ export default class Registration extends Component {
             // square brackets syntax is needed to inform that the property is a js. value!
             [evt.target.name]: evt.target.value,
         });
-        () => console.log;
     }
 
     handleClick() {
@@ -66,7 +65,7 @@ export default class Registration extends Component {
         return (
             <div>
                 {this.state.error && (
-                    <p>Something went wrong :( please try again </p>
+                    <p>`Something went wrong :( please try again `</p>
                 )}
                 <h1>Registration</h1>
                 <input
