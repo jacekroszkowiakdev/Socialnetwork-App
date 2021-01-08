@@ -4,6 +4,7 @@ import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import axios from "./axios";
+// import { BrowserRouter }
 
 export default class App extends Component {
     constructor(props) {
@@ -63,20 +64,25 @@ export default class App extends Component {
         console.log("this.state.first: ", this.state.first);
         console.log("this.state.last: ", this.state.last);
         return (
-            <div>
-                <h1>App component</h1>
-                <button className="logout" onClick={() => this.logout()}>
-                    logout
-                </button>
+            <BrowserRouter>
+                <div>
+                    <h1>App component</h1>
+                    <button className="logout" onClick={() => this.logout()}>
+                        Logout
+                    </button>
 
-                <ProfilePic first={this.state.first} last={this.state.last} />
-                <h2 onClick={() => this.toggleUploader()}></h2>
-                {this.state.uploaderIsVisible && (
-                    <Uploader setImage={this.setImage} />
-                )}
+                    <ProfilePic
+                        first={this.state.first}
+                        last={this.state.last}
+                    />
+                    <h2 onClick={() => this.toggleUploader()}></h2>
+                    {this.state.uploaderIsVisible && (
+                        <Uploader setImage={this.setImage} />
+                    )}
 
-                <Profile />
-            </div>
+                    <Profile />
+                </div>
+            </BrowserRouter>
         );
     }
 }

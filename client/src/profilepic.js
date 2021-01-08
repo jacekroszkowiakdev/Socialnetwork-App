@@ -6,7 +6,7 @@ export default function ProfilePic(props) {
     return (
         <div>
             <h1>
-                ProfilePic: {props.first} {props.last}
+                ProfilePic: {props.first} {props.last} {props.url}
             </h1>
         </div>
     );

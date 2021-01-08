@@ -7,7 +7,7 @@ const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
 const cryptoRandomString = require("crypto-random-string");
-
+// add SES!!!
 
 // Middleware:
 app.use(
@@ -105,24 +105,31 @@ app.get("/password/reset/start", (req, res) => {
     const { email } = req.body;
     db.checkForUserEmail(email)
         .then(({ rows }) => {
-            if (rows.length > 0) {
-                const secretCode = cryptoRandomString({length: 6,});
+            if (rows.length == 0) {
+                res.json({ error: true });
+            } else {
+                const secretCode = cryptoRandomString({ length: 6 });
                 res.json({ error: false });
                 db.addResetCode(email, secretCode)
                     .then(() => {
-                        sendEmail(email, `Use this code: ${secretCode} within 10 minutes to update your password`)
+                        ses.sendEmail(
+                            email,
+                            `Use this code: ${secretCode} within 10 minutes to update your password`
+                        );
                     })
                     .catch((err) => {
-                        console.log("error while writing verification code to DB: ", err);
-                        res.json({ error: true })
-                    })
-            } else {
-                res.json({ error: true })
+                        console.log(
+                            "error while writing verification code to DB: ",
+                            err
+                        );
+                        res.json({ error: true });
+                    });
             }
-})
-.catch((err) => {
-    console.log("error while checking email in DB: ", err);
-})
+        })
+        .catch((err) => {
+            console.log("error while checking email in DB: ", err);
+        });
+});
 
 //POST /logout
 app.get("/logout", (req, res) => {
