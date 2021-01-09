@@ -5,7 +5,6 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import Reset from "./reset";
 import axios from "./axios";
-// import { BrowserRouter }
 
 export default class App extends Component {
     constructor(props) {
@@ -15,6 +14,7 @@ export default class App extends Component {
             first: "Jacek",
             last: "Roszko",
             uploaderIsVisible: false,
+            redirect: undefined,
         };
     }
     componentDidMount() {

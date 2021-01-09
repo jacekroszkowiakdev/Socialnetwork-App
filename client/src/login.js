@@ -1,6 +1,6 @@
 //client/src/login.js
 import { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Reset from "./reset";
 import axios from "./axios";
 
@@ -11,6 +11,7 @@ export default class Login extends Component {
             email: null,
             password: null,
             error: false,
+            redirect: undefined,
         };
     }
     handleChange(evt) {
@@ -23,7 +24,7 @@ export default class Login extends Component {
         axios
             .post("/login", this.state)
             .then((res) => {
-                if (!res.data.success) {
+                if (res.data.error) {
                     // console.log("error in axios");
                     this.setState({ error: true });
                 } else {
@@ -36,6 +37,8 @@ export default class Login extends Component {
             });
     }
     render() {
+        if (this.state.redirect) return <Redirect to={this.state.redirect} />;
+
         return (
             <div>
                 <h1>Login</h1>

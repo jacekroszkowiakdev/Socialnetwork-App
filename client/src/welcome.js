@@ -1,6 +1,6 @@
 // client/src/welcome.js
 
-import { HashRouter, Route } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import React from "react";
 import Registration from "./registration";
 import Login from "./login";
@@ -16,11 +16,11 @@ export default function Welcome() {
                 className="logo"
             />
             <HashRouter>
-                <div>
+                <Switch>
                     <Route exact path="/" component={Registration} />
                     <Route path="/login" component={Login} />
                     <Route path="/reset" component={Reset} />
-                </div>
+                </Switch>
             </HashRouter>
         </div>
     );

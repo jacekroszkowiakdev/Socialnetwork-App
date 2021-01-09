@@ -4,35 +4,36 @@ const aws = require("aws-sdk");
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
-    secrets = process.env; // in prod the secrets are environment variables
+    secrets = process.env;
 } else {
-    secrets = require("./secrets"); // in dev they are in secrets.json which is listed in .gitignore
+    secrets = require("./secrets");
 }
 
 const ses = new aws.SES({
     accessKeyId: secrets.AWS_KEY,
     secretAccessKey: secrets.AWS_SECRET,
-    region: "eu-central-1",
+    region: "eu-west-1",
 });
 
-exports.sendEmail = function (recipent, message, subject) {
-    return ses.sendEmail({
-        Source: " Jacek Roszkowiak <jacekroszkowiakdev@gmail.com>", // use the verified address !
-        Destination: {
-            ToAddresses: [recipent],
-        },
-        Message: {
-            Body: {
-                Text: {
-                    Data: message,
+exports.sendEmail = function (recipient, message, subject) {
+    return ses
+        .sendEmail({
+            Source: " Jacek Roszkowiak <jacekroszkowiakdev@gmail.com>",
+            Destination: {
+                ToAddresses: [recipient],
+            },
+            Message: {
+                Body: {
+                    Text: {
+                        Data: message,
+                    },
+                },
+                Subject: {
+                    Data: subject,
                 },
             },
-            Subject: {
-                Data: subject,
-            },
-        },
-    }); // this is function that will send email on our behalf!
-}
-    .promise()
-    .then(() => console.log("it worked!"))
-    .catch((err) => console.log("err in ses.sendEmail: ", err));
+        })
+        .promise()
+        .then(() => console.log("an email was sent successfully"))
+        .catch((err) => console.error("error in ses.sendEmail: ", err));
+};

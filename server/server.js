@@ -36,12 +36,9 @@ app.use((req, res, next) => {
 
 // redirection:
 app.get("/welcome", (req, res) => {
-    // if the user IS logged in
     if (req.session.userId) {
-        // they shouldn't be allowed to see /welcome!!!!
         res.redirect("/");
     } else {
-        // the user is allowed to see the welcome page!
         res.sendFile(path.join(__dirname, "..", "client", "index.html"));
     }
 });
@@ -101,35 +98,35 @@ app.post("/login", (req, res) => {
 });
 
 // GET /password/reset/start
-app.get("/password/reset/start", (req, res) => {
-    const { email } = req.body;
-    db.checkForUserEmail(email)
-        .then(({ rows }) => {
-            if (rows.length == 0) {
-                res.json({ error: true });
-            } else {
-                const secretCode = cryptoRandomString({ length: 6 });
-                res.json({ error: false });
-                db.addResetCode(email, secretCode)
-                    .then(() => {
-                        ses.sendEmail(
-                            email,
-                            `Use this code: ${secretCode} within 10 minutes to update your password`
-                        );
-                    })
-                    .catch((err) => {
-                        console.log(
-                            "error while writing verification code to DB: ",
-                            err
-                        );
-                        res.json({ error: true });
-                    });
-            }
-        })
-        .catch((err) => {
-            console.log("error while checking email in DB: ", err);
-        });
-});
+// app.get("/password/reset/start", (req, res) => {
+//     const { email } = req.body;
+//     db.checkForUserEmail(email)
+//         .then(({ rows }) => {
+//             if (rows.length == 0) {
+//                 res.json({ error: true });
+//             } else {
+//                 const secretCode = cryptoRandomString({ length: 6 });
+//                 res.json({ error: false });
+//                 db.addResetCode(email, secretCode)
+//                     .then(() => {
+//                         ses.sendEmail(
+//                             email,
+//                             `Use this code: ${secretCode} within 10 minutes to update your password`
+//                         );
+//                     })
+//                     .catch((err) => {
+//                         console.log(
+//                             "error while writing verification code to DB: ",
+//                             err
+//                         );
+//                         res.json({ error: true });
+//                     });
+//             }
+//         })
+//         .catch((err) => {
+//             console.log("error while checking email in DB: ", err);
+//         });
+// });
 
 //POST /logout
 app.get("/logout", (req, res) => {
