@@ -12,6 +12,7 @@ export default class Reset extends Component {
             email: null,
             password: null,
             error: false,
+            code: null,
             step: 1,
         };
     }
@@ -25,15 +26,16 @@ export default class Reset extends Component {
     resetPassword() {
         console.log("resetPassword fired", this.state);
         axios
-            .post("/password/reset/start", this.state)
+            .post("/reset/start", this.state)
             .then((res) => {
                 this.setState({
                     error: false,
                     step: 2,
                 });
+                console.log("/reset this.state: ", this.state);
             })
             .catch((err) => {
-                console.log("POST /password/reset/start error: ", err);
+                console.log("POST reset/start error: ", err);
                 this.setState({ error: true });
             });
     }
@@ -58,7 +60,7 @@ export default class Reset extends Component {
             <div>
                 <h1>Reset Password</h1>
                 {this.state.error && (
-                    <p>`Something went wrong :( please try again `</p>
+                    <p>Something went wrong please try again</p>
                 )}
 
                 {this.state.step === 1 && (

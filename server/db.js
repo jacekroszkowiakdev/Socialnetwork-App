@@ -15,12 +15,8 @@ module.exports.checkForUserEmail = (email) => {
     return db.query("SELECT password, id FROM users WHERE email = $1", [email]);
 };
 
-module.exports.verifyResetCode = (email) => {
-    return db.query(
-        `SELECT code FROM codes
-WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`,
-        [email]
-    );
+module.exports.verifyEmail = (email) => {
+    return db.query(`SELECT email, id FROM users WHERE email = ($1)`, [email]);
 };
 
 module.exports.addResetCode = (email, code) => {
@@ -28,6 +24,14 @@ module.exports.addResetCode = (email, code) => {
         email,
         code,
     ]);
+};
+
+module.exports.verifyResetCode = (email) => {
+    return db.query(
+        `SELECT code FROM codes
+WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`,
+        [email]
+    );
 };
 
 module.exports.updatePassword = (password, email) => {
