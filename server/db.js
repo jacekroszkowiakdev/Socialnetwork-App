@@ -26,15 +26,14 @@ module.exports.addResetCode = (email, code) => {
     ]);
 };
 
-module.exports.verifyResetCode = (email) => {
+module.exports.verifyResetCode = () => {
     return db.query(
         `SELECT code FROM codes
-WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`,
-        [email]
+WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`
     );
 };
 
-module.exports.updatePassword = (password, email) => {
+module.exports.updatePassword = (email, password) => {
     return db.query(`UPDATE users SET password = $1 WHERE email = $2`, [
         password,
         email,

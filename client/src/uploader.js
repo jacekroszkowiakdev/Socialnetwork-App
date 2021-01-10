@@ -6,7 +6,7 @@ export default class Uploader extends Component {
         super();
         this.state = {};
     }
-    // uploaser has 3 purposes:
+    // uploader has 3 purposes:
     // 1. store the image the user uploaded
     handleClick() {
         console.log("this.props in Uploader: ", this.props);

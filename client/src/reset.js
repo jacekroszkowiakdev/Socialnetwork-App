@@ -43,7 +43,7 @@ export default class Reset extends Component {
     updatePassword() {
         console.log("resetPassword fired", this.state);
         axios
-            .post("/password/reset/verify", this.state)
+            .post("/reset/verify", this.state)
             .then((res) => {
                 this.setState({
                     error: false,
@@ -51,7 +51,7 @@ export default class Reset extends Component {
                 });
             })
             .catch((err) => {
-                console.log("POST //password/reset/verify error: ", err);
+                console.log("POST /reset/verify error: ", err);
                 this.setState({ error: true });
             });
     }
@@ -81,12 +81,14 @@ export default class Reset extends Component {
 
                 {this.state.step === 2 && (
                     <div>
+                        <p>Please enter the code you recieved:</p>
                         <input
                             onChange={(evt) => this.handleChange(evt)}
                             type="text"
-                            name="email"
-                            placeholder="Email"
+                            name="code"
+                            placeholder="secret code"
                         />
+                        <p>Please enter your new password:</p>
                         <input
                             onChange={(evt) => this.handleChange(evt)}
                             type="password"

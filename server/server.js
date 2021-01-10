@@ -74,9 +74,6 @@ app.post("/login", (req, res) => {
     const { email, password } = req.body;
     db.checkForUserEmail(email)
         .then(({ rows }) => {
-            console.log("email :", email);
-            console.log("typedPass: ", password);
-            console.log("db stored Pass", rows[0].password);
             compare(password, rows[0].password)
                 .then((result) => {
                     if (result) {
@@ -97,8 +94,8 @@ app.post("/login", (req, res) => {
         });
 });
 
-// GET /password/reset/start
-app.get("/reset/start", (req, res) => {
+// POST /reset/start
+app.post("/reset/start", (req, res) => {
     const { email } = req.body;
     db.verifyEmail(email)
         .then(({ rows }) => {
@@ -111,7 +108,8 @@ app.get("/reset/start", (req, res) => {
                     .then(() => {
                         ses.sendEmail(
                             email,
-                            `Use this code: ${secretCode} within 10 minutes to update your password`
+                            `Use this code: ${secretCode} within 10 minutes to update your password`,
+                            "Password reset request."
                         );
                     })
                     .catch((err) => {
@@ -128,9 +126,38 @@ app.get("/reset/start", (req, res) => {
         });
 });
 
+app.post("/reset/verify", (req, res) => {
+    const { code, password: newPassword, email } = req.body;
+    db.verifyResetCode(code)
+        .then(({ rows }) => {
+            const codeEntered = code;
+            const codeStored = rows[0].code;
+            if (codeEntered === codeStored) {
+                hash(newPassword)
+                    .then((hash) => {
+                        db.updatePassword(email, hash);
+                        console.log("password successfully updated");
+                        res.json({ error: false });
+                    })
+                    .catch((err) => {
+                        console.log("updating password in DB failed: ", err);
+                        res.json({ error: true });
+                    });
+            } else {
+                console.log("entered code doesn't match its DB counterpart");
+                res.json({ error: true });
+            }
+        })
+        .catch((err) => {
+            console.log("error while verifying code from DB: ", err);
+            res.json({ error: true });
+        });
+});
+
 //POST /logout
 app.get("/logout", (req, res) => {
     req.session = null;
+    res.json({ error: false });
     console.log("req.session after logout: ", req.session);
 });
 
