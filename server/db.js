@@ -39,3 +39,10 @@ module.exports.updatePassword = (email, password) => {
         email,
     ]);
 };
+
+module.exports.uploadProfilePic = (url, userId) => {
+    return db.query(`UPDATE users SET profile_pic = $1 WHERE id = $2`, [
+        url,
+        userId,
+    ]);
+};

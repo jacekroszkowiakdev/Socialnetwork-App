@@ -8,8 +8,31 @@ const db = require("./db");
 const { hash, compare } = require("./bc");
 const cryptoRandomString = require("crypto-random-string");
 const ses = require("./ses");
+const s3 = require("./s3");
+const { s3Url } = require("./config.json");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
 
 // Middleware:
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
+
 app.use(
     cookieSession({
         secret: `Grzegorz Brzęczyszczykiewicz`,
@@ -154,12 +177,37 @@ app.post("/reset/verify", (req, res) => {
         });
 });
 
-//POST /logout
+//GET /logout
 app.get("/logout", (req, res) => {
     req.session = null;
     res.json({ error: false });
     console.log("req.session after logout: ", req.session);
 });
+
+//POST /pic-upload:
+app.post(
+    "/profile/pic-upload",
+    uploader.single("profile-pic"),
+    s3.upload,
+    (req, res) => {
+        const url = `${s3Url}${req.file.filename}`;
+        if (req.file) {
+            db.uploadProfilePic(url, req.session.userId)
+                .then(() => {
+                    res.json({ profilePic: url });
+                })
+                .catch((err) => {
+                    console.log(
+                        "error while uploading profile picture to the DB: ",
+                        err
+                    );
+                    res.json({ error: true });
+                });
+        } else {
+            res.json({ error: true });
+        }
+    }
+);
 
 //GET /*
 app.get("*", function (req, res) {

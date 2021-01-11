@@ -12,20 +12,38 @@ export default class App extends Component {
         super(props);
         // hardcoded for demo purposes:
         this.state = {
-            first: "Jacek",
-            last: "Roszko",
+            first: null,
+            last: null,
+            email: null,
+            created_at: null,
+            profilePic: null,
             uploaderIsVisible: false,
-            redirect: undefined,
         };
     }
+
     componentDidMount() {
-        //componentDidMount = Vue's "mounted" function
         console.log("App component mounted!");
-        // use axios to make a request to the server
-        // the server will have to retrieve information about the user
-        // the info we nee is basically everything except the password)
-        // once we get a response from axios, store that data in the state of App
+        // use axios to make a request to the server to retrieve information about the user, then store that data in the state of App:
+        axios
+            .get("/user/profile")
+            .then(({ data }) => {
+                this.setState({
+                    first: data[0].first,
+                    last: data[0].last,
+                    email: data[0].email,
+                    created_at: data[0].created_at,
+                    profilePic: data[0].profile_pic, // add to DB, check
+                });
+            })
+            .catch((err) => {
+                console.log(
+                    "axios.get /user/profile - error getting user data: ",
+                    err
+                );
+                this.setState({ error: true });
+            });
     }
+
     logout() {
         axios
             .get("/logout")
@@ -37,25 +55,16 @@ export default class App extends Component {
                 console.log("GET /logout error", err);
             });
     }
+
     toggleUploader() {
         console.log("toggle uploader fired!");
-        // if (!this.state.uploaderIsVisible) {
-        //     this.setState({
-        //         uploaderIsVisible: true,
-        //     });
-        // } else {
-        //     this.setState({
-        //         uploaderIsVisible: false,
-        //     });
-        // }
-        // NEW CONCISE WAY :
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible,
         });
     }
 
-    setImage() {
-        // any child component of App can call this function and it will update the state of App, regadles what child is called from (pass it as a prop!)
+    updateProfilePicture(newProfilePic) {
+        // any child component of App can call this function and it will update the state of App, regardless what child is called from (pass it as a prop!):
         this.setState({
             ProfilePic: "whatever the new pic is",
         });
