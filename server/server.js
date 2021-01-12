@@ -180,7 +180,6 @@ app.post("/reset/verify", (req, res) => {
 app.get("/logout", (req, res) => {
     req.session = null;
     res.json({ error: false });
-    console.log("req.session after logout: ", req.session);
 });
 
 //GET /profile
@@ -188,8 +187,15 @@ app.get("/profile", (req, res) => {
     const id = req.session.userId;
     db.getProfileInfo(id)
         .then(({ rows }) => {
+            // const { first, last, email, created_at, profile_pic } = rows[0];
+            // res.json({
+            //     id: req.session.userId,
+            //     first: first,
+            //     last: last,
+            //     email: email,
+            //     created_at: created_at,
+            //     profile_pic: profile_pic,
             res.json(rows);
-            console.log("res.json: ", res.json);
         })
         .catch((err) => {
             console.log("error while getting user profile from DB: ", err);
@@ -200,14 +206,14 @@ app.get("/profile", (req, res) => {
 //POST /pic-upload:
 app.post(
     "/profile/pic-upload",
-    uploader.single("profile-pic"),
+    uploader.single("profile_pic"),
     s3.upload,
     (req, res) => {
         const url = `${s3Url}${req.file.filename}`;
         if (req.file) {
             db.uploadProfilePic(url, req.session.userId)
                 .then(() => {
-                    res.json({ profilePic: url });
+                    res.json({ profile_pic: url });
                 })
                 .catch((err) => {
                     console.log(
@@ -224,13 +230,14 @@ app.post(
 
 //GET /*
 app.get("*", function (req, res) {
-    // if the user is NOT logged in
+    // if
     if (!req.session.userId) {
-        // send them away!!!!
+        console.log(`req.session.userId is null, user not logged in`);
         res.redirect("/welcome");
     } else {
         // serve them the page they requested - they're allowed to be here :)
         // NEVER COMMENT THIS LINE OUT EVER EVER EVER EVER
+        console.log(`user logged in with ID : `, req.session.userId);
         res.sendFile(path.join(__dirname, "..", "client", "index.html"));
     }
 });

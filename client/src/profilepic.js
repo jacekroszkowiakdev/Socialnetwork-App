@@ -2,11 +2,10 @@
 
 export default function ProfilePic(props) {
     console.log("ProfilePic props: ", props);
-    // console.log("ProfilePic this.state: ", this.state);
     // destructuring is also possible!!! { first, last } -> then in the <h1>ProfilePic {first} {last} </h1>
     return (
         <div>
-            {this.state.profilePic && (
+            {props.profilePic && (
                 <img
                     className="profilePic"
                     onClick={() => props.toggleUploader()}
@@ -14,7 +13,7 @@ export default function ProfilePic(props) {
                     alt={props.first}
                 />
             )}
-            {!this.state.profilePic && (
+            {!props.profilePic && (
                 <img
                     className="profilePic"
                     onClick={() => props.toggleUploader()}

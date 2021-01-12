@@ -27,11 +27,12 @@ export default class App extends Component {
             .get("/profile")
             .then(({ data }) => {
                 this.setState({
-                    first: data[0].first,
-                    last: data[0].last,
-                    email: data[0].email,
-                    created_at: data[0].created_at,
-                    profile_pic: data[0].profile_pic, // add to DB, check
+                    // first: data[0].first,
+                    // last: data[0].last,
+                    // email: data[0].email,
+                    // created_at: data[0].created_at,
+                    // profile_pic: data[0].profile_pic, // add to DB, check
+                    ...data,
                 });
             })
             .catch((err) => {
@@ -80,6 +81,8 @@ export default class App extends Component {
 
     render() {
         console.log("props in App/Uploader: ", this.props);
+        console.log("app get/profile data: ", this.data);
+        console.log("app get/profile state: ", this.state);
         // console.log("this.state.first: ", this.state.first);
         // console.log("this.state.last: ", this.state.last);
         return (
@@ -92,6 +95,7 @@ export default class App extends Component {
                     <ProfilePic
                         first={this.state.first}
                         last={this.state.last}
+                        profile_pic={this.state.profile_pic}
                         toggleUploader={() => this.toggleUploader()}
                     />
                     <h2 onClick={() => this.toggleUploader()}></h2>
