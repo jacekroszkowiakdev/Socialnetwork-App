@@ -71,17 +71,14 @@ app.post("/register", (req, res) => {
     console.log("register request body: ", req.body);
     hash(password)
         .then((hashedPassword) => {
-            // console.log("hashedPassword: ", hashedPassword);
-            // console.log("req.session before register: ", req.session);
             db.registerUser(first, last, email, hashedPassword)
                 .then(({ rows }) => {
                     console.log("New user added to table users");
                     req.session.userId = rows[0].id;
                     res.json({ error: false });
-                    // console.log("req.session after register: ", req.session);
                 })
                 .catch((err) => {
-                    console.log("error writing user profile to DBS", err);
+                    console.log("error writing user profile to DB", err);
                     res.json({ error: true });
                 });
         })

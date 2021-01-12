@@ -17,6 +17,7 @@ export default class App extends Component {
             created_at: null,
             profile_pic: null,
             uploaderIsVisible: false,
+            error: false,
         };
     }
 
@@ -27,17 +28,17 @@ export default class App extends Component {
             .get("/profile")
             .then(({ data }) => {
                 this.setState({
-                    // first: data[0].first,
-                    // last: data[0].last,
-                    // email: data[0].email,
-                    // created_at: data[0].created_at,
-                    // profile_pic: data[0].profile_pic, // add to DB, check
-                    ...data,
+                    first: data[0].first,
+                    last: data[0].last,
+                    email: data[0].email,
+                    created_at: data[0].created_at,
+                    profile_pic: data[0].profile_pic, // add to DB, check
+                    // ...data[0],
                 });
             })
             .catch((err) => {
                 console.log(
-                    "axios.get /user/profile - error getting user data: ",
+                    "axios.get /profile - error getting user data: ",
                     err
                 );
                 this.setState({ error: true });
@@ -54,6 +55,12 @@ export default class App extends Component {
             .catch((err) => {
                 console.log("GET /logout error", err);
             });
+    }
+
+    handleChange(evt) {
+        this.setState({
+            [evt.target.name]: evt.target.value,
+        });
     }
 
     toggleUploader() {
@@ -81,33 +88,30 @@ export default class App extends Component {
 
     render() {
         console.log("props in App/Uploader: ", this.props);
-        console.log("app get/profile data: ", this.data);
-        console.log("app get/profile state: ", this.state);
-        // console.log("this.state.first: ", this.state.first);
-        // console.log("this.state.last: ", this.state.last);
         return (
-            <BrowserRouter>
-                <div>
-                    <h1>App component</h1>
-                    <button className="logout" onClick={() => this.logout()}>
-                        Logout
-                    </button>
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
+            <div>
+                <h1>App component</h1>
+                <button className="logout" onClick={() => this.logout()}>
+                    Logout
+                </button>
+
+                <ProfilePic
+                    first={this.state.first}
+                    last={this.state.last}
+                    profile_pic={this.state.profile_pic}
+                    toggleUploader={() => this.toggleUploader()}
+                />
+                <h2 onClick={() => this.toggleUploader()}></h2>
+                {this.state.uploaderIsVisible && (
+                    <Uploader
                         profile_pic={this.state.profile_pic}
-                        toggleUploader={() => this.toggleUploader()}
+                        toggleUploader={this.toggleUploader}
+                        updateProfilePicture={(newProfilePic) =>
+                            this.updateProfilePicture(newProfilePic)
+                        }
                     />
-                    <h2 onClick={() => this.toggleUploader()}></h2>
-                    {this.state.uploaderIsVisible && (
-                        <Uploader
-                            updateProfilePicture={(newProfilePic) =>
-                                this.updateProfilePicture(newProfilePic)
-                            }
-                        />
-                    )}
-                </div>
-            </BrowserRouter>
+                )}
+            </div>
         );
     }
 }
