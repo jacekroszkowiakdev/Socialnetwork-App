@@ -12,7 +12,6 @@ const s3 = require("./s3");
 const { s3Url } = require("./config.json");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
-const path = require("path");
 
 // Middleware:
 const diskStorage = multer.diskStorage({
@@ -182,6 +181,20 @@ app.get("/logout", (req, res) => {
     req.session = null;
     res.json({ error: false });
     console.log("req.session after logout: ", req.session);
+});
+
+//GET /profile
+app.get("/profile", (req, res) => {
+    const id = req.session.userId;
+    db.getProfileInfo(id)
+        .then(({ rows }) => {
+            res.json(rows);
+            console.log("res.json: ", res.json);
+        })
+        .catch((err) => {
+            console.log("error while getting user profile from DB: ", err);
+            res.json({ error: true });
+        });
 });
 
 //POST /pic-upload:
