@@ -226,6 +226,20 @@ app.post(
     }
 );
 
+//POST /profile/bio-update
+app.post("/profile/bio-update", (req, res) => {
+    const id = req.session.userId;
+    const { bio } = req.body;
+    db.updateBio(bio, id)
+        .then((rows) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error while updating bio in DB: ", err);
+            res.json({ error: true });
+        });
+});
+
 //GET /*
 app.get("*", function (req, res) {
     // if

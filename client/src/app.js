@@ -16,6 +16,7 @@ export default class App extends Component {
             email: null,
             created_at: null,
             profile_pic: null,
+            bio: null,
             uploaderIsVisible: false,
             error: false,
         };
@@ -34,7 +35,8 @@ export default class App extends Component {
                     last: data[0].last,
                     email: data[0].email,
                     created_at: data[0].created_at,
-                    profile_pic: data[0].profile_pic, // add to DB, check
+                    profile_pic: data[0].profile_pic,
+                    bio: data[0].bio, // add to DB, check
                     // ...data[0],
                 });
             })
@@ -88,8 +90,22 @@ export default class App extends Component {
         });
     }
 
+    bioUpdater(bio) {
+        axios
+            .post("/profile/bio-update", {
+                bio: bio,
+            })
+            .then(({ data }) => {
+                this.setState({
+                    bio: data[0].bio,
+                });
+            })
+            .catch((err) => {
+                console.log("axios.post /profile/bio-update error, ", err);
+            });
+    }
+
     render() {
-        console.log("props in App/Uploader: ", this.props);
         return (
             <div>
                 <h1>App component</h1>

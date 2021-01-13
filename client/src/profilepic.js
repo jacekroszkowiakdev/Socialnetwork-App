@@ -4,7 +4,7 @@ export default function ProfilePic(props) {
     console.log("ProfilePic props: ", props);
     // destructuring is also possible!!! { first, last } -> then in the <h1>ProfilePic {first} {last} </h1>
     return (
-        <div>
+        <div className="profilePic-container">
             {props.profile_pic && (
                 <img
                     className="profilePic"
