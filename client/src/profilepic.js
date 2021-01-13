@@ -5,19 +5,19 @@ export default function ProfilePic(props) {
     // destructuring is also possible!!! { first, last } -> then in the <h1>ProfilePic {first} {last} </h1>
     return (
         <div>
-            {props.profilePic && (
+            {props.profile_pic && (
                 <img
                     className="profilePic"
                     onClick={() => props.toggleUploader()}
-                    src={props.profilePic}
+                    src={props.profile_pic}
                     alt={props.first}
                 />
             )}
-            {!props.profilePic && (
+            {!props.profile_pic && (
                 <img
                     className="profilePic"
                     onClick={() => props.toggleUploader()}
-                    src="./default_pic.png"
+                    src="/default_pic.png"
                     alt={props.first}
                 />
             )}

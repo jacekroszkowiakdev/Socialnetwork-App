@@ -200,15 +200,16 @@ app.get("/profile", (req, res) => {
         });
 });
 
-//POST /pic-upload:
+//POST /profile/pic-upload:
 app.post(
     "/profile/pic-upload",
     uploader.single("profile_pic"),
     s3.upload,
     (req, res) => {
         const url = `${s3Url}${req.file.filename}`;
+        const id = req.session.userId;
         if (req.file) {
-            db.uploadProfilePic(url, req.session.userId)
+            db.uploadProfilePic(url, id)
                 .then(() => {
                     res.json({ profile_pic: url });
                 })

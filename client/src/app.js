@@ -19,6 +19,8 @@ export default class App extends Component {
             uploaderIsVisible: false,
             error: false,
         };
+        //  this makes sure that the context is keept when passing the toggleUploader method down the another component:
+        this.toggleUploader = this.toggleUploader.bind(this);
     }
 
     componentDidMount() {

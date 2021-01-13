@@ -25,7 +25,8 @@ export default class Uploader extends Component {
         axios
             .post("/profile/pic-upload", formData)
             .then((res) => {
-                this.props.updateProfilePicture(res.data.profilePic);
+                this.props.updateProfilePicture(res.data.profile_pic);
+                console.log("res.data: ", res.data);
                 this.props.toggleUploader();
             })
             .catch((err) => {
