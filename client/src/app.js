@@ -4,7 +4,11 @@ import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import axios from "./axios";
+
+// library passes in a prop called match into every route that is rendered. Inside this match object is another object called params
 import { BrowserRouter, Route } from "react-router-dom";
+
+
 
 export default class App extends Component {
     constructor() {
@@ -92,8 +96,12 @@ export default class App extends Component {
         });
     }
 
-    bioUpdater(bio) {
-        console.log("APP bio in bioUpdater: ", bio);
+    //zmień tak, aby dane wracały z dziecka do rodzica (callback)
+    bioUpdater(draftBio) {
+        console.log("APP bio in bioUpdater: ", draftBio);
+        this.setState({
+            bio: draftBio,
+        });
     }
 
     render() {
@@ -112,6 +120,7 @@ export default class App extends Component {
                         toggleUploader={() => this.toggleUploader()}
                     />
                     <p className="userName">{this.state.first}</p>
+                    <p>{this.state.bio}</p>
                     {this.state.uploaderIsVisible && (
                         <Uploader
                             profile_pic={this.state.profile_pic}
@@ -131,10 +140,13 @@ export default class App extends Component {
                                 profile_pic={this.state.profile_pic}
                                 bio={this.state.bio}
                                 toggleUploader={() => this.toggleUploader}
-                                bioUpdater={(arg) => this.bioUpdater(arg)}
+                                bioUpdater={(draftBio) =>
+                                    this.bioUpdater(draftBio)
+                                }
                             />
                         )}
                     />
+                    <Route path="/user/:id" component={OtherProfile} />
                 </div>
             </BrowserRouter>
         );
