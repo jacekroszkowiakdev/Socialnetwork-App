@@ -11,16 +11,14 @@ export default function Welcome() {
         <div id="welcome">
             <h1>Welcome!</h1>
             <img
-                src="/client/src/so_social.JPG"
+                src="/so_social.JPG"
                 alt="social network logo"
                 className="logo"
             />
             <HashRouter>
-                <Switch>
-                    <Route exact path="/" component={Registration} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/reset" component={Reset} />
-                </Switch>
+                <Route exact path="/" component={Registration} />
+                <Route path="/login" component={Login} />
+                <Route path="/reset" component={Reset} />
             </HashRouter>
         </div>
     );

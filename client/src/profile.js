@@ -6,18 +6,20 @@ import Bio from "./bio";
 export default function Profile(props) {
     return (
         <div className="profile-container">
-            <h1>User profile</h1>
+            {props.largerPic && (
+                <ProfilePic
+                    className="largerProfilePic"
+                    profile_pic={props.profile_pic}
+                    // src={props.profile_pic}
+                    alt={props.first}
+                />
+            )}
 
-            <ProfilePic
-                className="largerProfilePic"
-                profile_pic={props.profile_pic}
-                src={props.profile_pic}
-                alt={props.first}
-            />
-            <h3>
-                Hello my name is {props.first} {props.last}
-            </h3>
-            <Bio bio={props.bio} updateBio={props.updateBio} />
+            <h4>
+                {props.first} {props.last}
+            </h4>
+            <h1>User profile</h1>
+            <Bio bio={props.bio} bioUpdater={props.bioUpdater} />
         </div>
     );
 }

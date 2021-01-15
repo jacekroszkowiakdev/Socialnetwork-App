@@ -3,7 +3,6 @@ import { Component } from "react";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import Reset from "./reset";
 import axios from "./axios";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -18,10 +17,13 @@ export default class App extends Component {
             profile_pic: null,
             bio: null,
             uploaderIsVisible: false,
+            largerPic: null,
             error: false,
         };
-        //  this makes sure that the context is keept when passing the toggleUploader method down the another component:
-        this.toggleUploader = this.toggleUploader.bind(this);
+        //  this makes sure that the context is kept when passing the toggleUploader method down the another component:
+        // this.toggleUploader = this.toggleUploader.bind(this);
+        // this.updateProfilePicture = this.updateProfilePicture.bind(this);
+        // this.bioUpdater = this.bioUpdater.bind(this);
     }
 
     componentDidMount() {
@@ -52,7 +54,7 @@ export default class App extends Component {
     logout() {
         axios
             .get("/logout")
-            .then((res) => {
+            .then(() => {
                 console.log("user logged out");
                 location.replace("/welcome");
             })
@@ -96,6 +98,7 @@ export default class App extends Component {
                 bio: bio,
             })
             .then(({ data }) => {
+                console.log("bioUpdated with: " data[0].bio)
                 this.setState({
                     bio: data[0].bio,
                 });
@@ -107,29 +110,45 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
-                <h1>App component</h1>
-                <button className="logout" onClick={() => this.logout()}>
-                    Logout
-                </button>
+            <BrowserRouter>
+                <div>
+                    <h1>App component</h1>
+                    <button className="logout" onClick={() => this.logout()}>
+                        Logout
+                    </button>
 
-                <ProfilePic
-                    first={this.state.first}
-                    last={this.state.last}
-                    profile_pic={this.state.profile_pic}
-                    toggleUploader={() => this.toggleUploader()}
-                />
-                <h2 onClick={() => this.toggleUploader()}></h2>
-                {this.state.uploaderIsVisible && (
-                    <Uploader
+                    <ProfilePic
+                        first={this.state.first}
+                        last={this.state.last}
                         profile_pic={this.state.profile_pic}
-                        toggleUploader={this.toggleUploader}
-                        updateProfilePicture={(newProfilePic) =>
-                            this.updateProfilePicture(newProfilePic)
-                        }
+                        toggleUploader={() => this.toggleUploader()}
                     />
-                )}
-            </div>
+                    <p className="userName">{this.state.first}</p>
+                    {this.state.uploaderIsVisible && (
+                        <Uploader
+                            profile_pic={this.state.profile_pic}
+                            toggleUploader={() => this.toggleUploader}
+                            updateProfilePicture={(newProfilePic) =>
+                                this.updateProfilePicture(newProfilePic)
+                            }
+                        />
+                    )}
+                    <Route
+                        exact
+                        path="/"
+                        render={() => (
+                            <Profile
+                                first={this.state.first}
+                                last={this.state.last}
+                                profile_pic={this.state.profile_pic}
+                                bio={this.state.bio}
+                                toggleUploader={() => this.state.toggleUploader}
+                                bioUpdater={() => this.state.bioUpdater}
+                            />
+                        )}
+                    />
+                </div>
+            </BrowserRouter>
         );
     }
 }
