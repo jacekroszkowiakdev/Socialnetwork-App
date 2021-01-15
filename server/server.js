@@ -231,8 +231,8 @@ app.post("/profile/bio-update", (req, res) => {
     const id = req.session.userId;
     const { bio } = req.body;
     db.updateBio(bio, id)
-        .then((rows) => {
-            res.json(rows);
+        .then(({ rows }) => {
+            res.json(rows[0].bio);
         })
         .catch((err) => {
             console.log("error while updating bio in DB: ", err);

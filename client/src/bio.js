@@ -1,4 +1,5 @@
 import { Component } from "react";
+import axios from "./axios";
 
 export default class Bio extends Component {
     constructor(props) {
@@ -8,12 +9,14 @@ export default class Bio extends Component {
             bio: null,
             largerPic: null,
         };
+
+        console.log("props in bio component: ", props);
     }
 
     toggleTextarea() {
-        console.log("toggleTextarea fired!");
+        //console.log("toggleTextarea fired!");
         this.setState({
-            bio: this.state.bio,
+            bio: this.props.bio,
             textareaVisible: !this.state.textareaVisible,
             largerPic: true,
         });
@@ -21,8 +24,16 @@ export default class Bio extends Component {
 
     updateBio() {
         console.log("updateBio fired!");
-        this.props.bioUpdater(this.state.bio);
-        this.toggleTextarea();
+        axios
+            .post("/profile/bio-update", this.state)
+            .then(({ data }) => {
+                console.log("data from updating bio: ", data[0].bio);
+                this.props.bioUpdater(data[0].bio);
+                this.toggleTextarea();
+            })
+            .catch((err) => {
+                console.log("axios.post /profile/bio-update error, ", err);
+            });
     }
 
     handleChange(evt) {
@@ -36,6 +47,7 @@ export default class Bio extends Component {
     // If the user has a bio saved, the BioEditor component should show that text, along with an "Edit Bio" button.
 
     render() {
+        console.log("props in bio: ", this.props);
         return (
             <>
                 {this.state.textareaVisible && (
@@ -64,7 +76,7 @@ export default class Bio extends Component {
                     <button
                         id="button-bio"
                         className="button-bio"
-                        onClick={() => this.toggleTextarea}
+                        onClick={() => this.toggleTextarea()}
                     >
                         {!this.state.bio ? "Add Bio" : "Edit Bio"}
                     </button>

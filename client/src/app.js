@@ -93,19 +93,7 @@ export default class App extends Component {
     }
 
     bioUpdater(bio) {
-        axios
-            .post("/profile/bio-update", {
-                bio: bio,
-            })
-            .then(({ data }) => {
-                console.log("bioUpdated with: " data[0].bio)
-                this.setState({
-                    bio: data[0].bio,
-                });
-            })
-            .catch((err) => {
-                console.log("axios.post /profile/bio-update error, ", err);
-            });
+        console.log("APP bio in bioUpdater: ", bio);
     }
 
     render() {
@@ -142,8 +130,8 @@ export default class App extends Component {
                                 last={this.state.last}
                                 profile_pic={this.state.profile_pic}
                                 bio={this.state.bio}
-                                toggleUploader={() => this.state.toggleUploader}
-                                bioUpdater={() => this.state.bioUpdater}
+                                toggleUploader={() => this.toggleUploader}
+                                bioUpdater={(arg) => this.bioUpdater(arg)}
                             />
                         )}
                     />
