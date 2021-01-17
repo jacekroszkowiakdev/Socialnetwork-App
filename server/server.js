@@ -242,13 +242,11 @@ app.post("/api/profile/bio-update", (req, res) => {
 
 //GET /api/other-user/:id
 app.get("/api/other-user/:id", (req, res) => {
-    console.log("req.params: ", req.params.id);
     if (req.params.id == req.session.userId) {
         res.json({ loggedIn: true });
     } else {
         db.getOtherProfile(req.params.id)
             .then(({ rows }) => {
-                console.log("rows", rows);
                 res.json(rows);
             })
             .catch((err) => {
@@ -259,6 +257,30 @@ app.get("/api/other-user/:id", (req, res) => {
                 res.json({ error: true });
             });
     }
+});
+
+//GET api/users
+app.get("/api/new-users", (req, res) => {
+    db.getLatestUsers()
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error while retrieving last 3 users from DB: ", err);
+            res.json({ error: true });
+        });
+});
+
+//GET api/find-users
+app.get("/api/find-users", (req, res) => {
+    db.searchUsers()
+        .then(({ rows }) => {
+            res.json(rows);
+        })
+        .catch((err) => {
+            console.log("error while finding users in DB: ", err);
+            res.json({ error: true });
+        });
 });
 
 //GET /*

@@ -64,3 +64,16 @@ module.exports.getOtherProfile = (userId) => {
         [userId]
     );
 };
+
+module.exports.getLatestUsers = () => {
+    return db.query(
+        `SELECT id, first, last, profile_pic FROM users ORDER BY id DESC LIMIT 3`
+    );
+};
+
+module.exports.searchUsers = (userQuery) => {
+    return db.query(
+        `SELECT id, first, last, profile_pic FROM users WHERE first ILIKE $1 OR last ILIKE $1 ODRER BY id DESC`,
+        ["%" + userQuery + "%"]
+    );
+};
