@@ -1,4 +1,4 @@
-//client/src/login.js
+//client/src/api/login.js
 import { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import Reset from "./reset";
@@ -22,7 +22,7 @@ export default class Login extends Component {
     handleClick() {
         console.log("handle click fired", this.state);
         axios
-            .post("/login", this.state)
+            .post("/api/login", this.state)
             .then((res) => {
                 if (res.data.error) {
                     // console.log("error in axios");
@@ -32,7 +32,7 @@ export default class Login extends Component {
                 }
             })
             .catch((err) => {
-                console.log(`axios.post("/login") error: `, err);
+                console.log(`axios.post("/api/login") error: `, err);
                 this.setState({ error: true });
             });
     }

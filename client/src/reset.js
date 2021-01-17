@@ -26,7 +26,7 @@ export default class Reset extends Component {
     resetPassword() {
         console.log("resetPassword fired", this.state);
         axios
-            .post("/reset/start", this.state)
+            .post("/api/reset/start", this.state)
             .then((res) => {
                 this.setState({
                     error: false,
@@ -43,7 +43,7 @@ export default class Reset extends Component {
     updatePassword() {
         console.log("resetPassword fired", this.state);
         axios
-            .post("/reset/verify", this.state)
+            .post("/api/reset/verify", this.state)
             .then((res) => {
                 this.setState({
                     error: false,
@@ -51,7 +51,7 @@ export default class Reset extends Component {
                 });
             })
             .catch((err) => {
-                console.log("POST /reset/verify error: ", err);
+                console.log("POST /api/reset/verify error: ", err);
                 this.setState({ error: true });
             });
     }
@@ -107,7 +107,7 @@ export default class Reset extends Component {
                             Password changed, you can now log in with your new
                             password:
                         </h4>
-                        <Link to="/login">Click here to Log in!</Link>
+                        <Link to="/api/login">Click here to Log in!</Link>
                     </div>
                 )}
             </div>

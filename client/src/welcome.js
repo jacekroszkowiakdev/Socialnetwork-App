@@ -1,6 +1,6 @@
 // client/src/welcome.js
 
-import { HashRouter, Route, Switch } from "react-router-dom";
+import { HashRouter, Route } from "react-router-dom";
 import React from "react";
 import Registration from "./registration";
 import Login from "./login";

@@ -1,7 +1,6 @@
 // client/src/profilepic.js
 
 export default function ProfilePic(props) {
-    console.log("ProfilePic props: ", props);
     // destructuring is also possible!!! { first, last } -> then in the <h1>ProfilePic {first} {last} </h1>
     return (
         <div className="profilePic-container">

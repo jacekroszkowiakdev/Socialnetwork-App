@@ -49,7 +49,7 @@ export default class Registration extends Component {
         // - success: redirect user to / using /: location.replace('/');
         console.log("handle click fired", this.state);
         axios
-            .post("/register", this.state)
+            .post("/api/register", this.state)
             .then((res) => {
                 if (!res.data.success) {
                     this.setState({ error: true });
@@ -58,7 +58,7 @@ export default class Registration extends Component {
                 }
             })
             .catch((err) => {
-                console.log("POST /register error", err);
+                console.log("POST /api/register error", err);
             });
     }
     render() {
@@ -98,7 +98,7 @@ export default class Registration extends Component {
                 />
                 <button onClick={() => this.handleClick()}>Submit</button>
                 <p>I have an account</p>
-                <Link to="/login">Click here to Log in!</Link>
+                <Link to="/api/login">Click here to Log in!</Link>
             </div>
         );
     }

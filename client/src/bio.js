@@ -25,14 +25,14 @@ export default class Bio extends Component {
     updateBio() {
         console.log("updateBio fired!");
         axios
-            .post("/profile/bio-update", this.state)
+            .post("/api/profile/bio-update", this.state)
             .then(({ data }) => {
                 console.log("data from updating bio: ", data[0].bio);
                 this.props.bioUpdater(data[0].bio);
                 this.toggleTextarea();
             })
             .catch((err) => {
-                console.log("axios.post /profile/bio-update error, ", err);
+                console.log("axios.post /api/profile/bio-update error, ", err);
             });
     }
 

@@ -65,8 +65,8 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-// POST /register
-app.post("/register", (req, res) => {
+// POST /api/register
+app.post("/api/register", (req, res) => {
     const { first, last, email, password } = req.body;
     console.log("register request body: ", req.body);
     hash(password)
@@ -88,8 +88,8 @@ app.post("/register", (req, res) => {
         });
 });
 
-//POST /login
-app.post("/login", (req, res) => {
+//POST /api/login
+app.post("/api/login", (req, res) => {
     const { email, password } = req.body;
     db.checkForUserEmail(email)
         .then(({ rows }) => {
@@ -113,8 +113,8 @@ app.post("/login", (req, res) => {
         });
 });
 
-// POST /reset/start
-app.post("/reset/start", (req, res) => {
+// POST /api/reset/start
+app.post("/api/reset/start", (req, res) => {
     const { email } = req.body;
     db.verifyEmail(email)
         .then(({ rows }) => {
@@ -145,7 +145,7 @@ app.post("/reset/start", (req, res) => {
         });
 });
 
-app.post("/reset/verify", (req, res) => {
+app.post("/api/reset/verify", (req, res) => {
     const { code, password: newPassword, email } = req.body;
     db.verifyResetCode(code)
         .then(({ rows }) => {
@@ -173,14 +173,14 @@ app.post("/reset/verify", (req, res) => {
         });
 });
 
-//GET /logout
-app.get("/logout", (req, res) => {
+//GET /api/logout
+app.get("/api/logout", (req, res) => {
     req.session = null;
     res.json({ error: false });
 });
 
-//GET /profile
-app.get("/profile", (req, res) => {
+//GET /api/profile
+app.get("/api/profile", (req, res) => {
     const id = req.session.userId;
     db.getProfileInfo(id)
         .then(({ rows }) => {
@@ -200,9 +200,9 @@ app.get("/profile", (req, res) => {
         });
 });
 
-//POST /profile/pic-upload:
+//POST /api/profile/pic-upload:
 app.post(
-    "/profile/pic-upload",
+    "/api/profile/pic-upload",
     uploader.single("profile_pic"),
     s3.upload,
     (req, res) => {
@@ -226,8 +226,8 @@ app.post(
     }
 );
 
-//POST /profile/bio-update
-app.post("/profile/bio-update", (req, res) => {
+//POST /api/profile/bio-update
+app.post("/api/profile/bio-update", (req, res) => {
     const id = req.session.userId;
     const { bio } = req.body;
     db.updateBio(bio, id)
@@ -238,6 +238,27 @@ app.post("/profile/bio-update", (req, res) => {
             console.log("error while updating bio in DB: ", err);
             res.json({ error: true });
         });
+});
+
+//GET /api/other-user/:id
+app.get("/api/other-user/:id", (req, res) => {
+    console.log("req.params: ", req.params.id);
+    if (req.params.id == req.session.userId) {
+        res.json({ loggedIn: true });
+    } else {
+        db.getOtherProfile(req.params.id)
+            .then(({ rows }) => {
+                console.log("rows", rows);
+                res.json(rows);
+            })
+            .catch((err) => {
+                console.log(
+                    "error while reading other user profile from DB: ",
+                    err
+                );
+                res.json({ error: true });
+            });
+    }
 });
 
 //GET /*

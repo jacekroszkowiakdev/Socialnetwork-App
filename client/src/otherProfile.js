@@ -2,6 +2,7 @@
 
 import { Component } from "react";
 import axios from "./axios";
+import ProfilePic from "./profilePic";
 
 // export default class OtherProfile from
 
@@ -10,34 +11,52 @@ import axios from "./axios";
 export default class OtherProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            id: null,
+            first: null,
+            last: null,
+            bio: null,
+            profilePic: null,
+            loggedIn: null,
+        };
     }
-
-    // With react-router-dom, we designate a dynamic portion of the URL to be matched by putting a colon (:) before it. Let's explore this by adding a modal that will display a user's information when we click on it:
 
     componentDidMount() {
+        console.log("other profile component did mount!");
+        console.log("props in other profile!!!", this.props.id);
         axios
-            .get(`other-user/:${this.props.match.params.id}`, {
-                params: { id: this.props.match.params.id },
-            })
+            .get(`/api/other-user/${this.props.match.params.id}`)
             .then(({ data }) => {
-                console.log("OP component did mount data: ", data);
-                this.setState({
-                    ...data[0]
-                });
+                if (data.loggedIn) {
+                    this.props.history.push("/");
+                } else {
+                    console.log("Other profile data: ", data);
+                    this.setState({ ...data[0] });
+                }
             })
             .catch((err) => {
-            console.log(`error in axios.get "other-user/": `, err)
+                console.log(
+                    "axios.get /api/other-user - error getting user id form params: ",
+                    err
+                );
+                this.setState({ error: true });
+            });
     }
 
-    render(){
-return(
-{/* <div>
-<img src="{this.sate.profile_pic}"></img>
-<p>{this.state.first}</p>
-<p className="otherBio">{this.state.bio}</p>
-</div> */}
-
-)}
-
-} // other profile end here
+    render() {
+        console.log("OP props: ", this.props);
+        return (
+            <div className="other-profile-container">
+                <ProfilePic
+                    first={this.state.first}
+                    last={this.state.last}
+                    profile_pic={this.state.profile_pic}
+                />
+                <h3 className="otherName">
+                    {this.state.first} {this.state.last}
+                </h3>
+                <p className="otherBio">{this.state.bio}</p>
+            </div>
+        );
+    }
+}

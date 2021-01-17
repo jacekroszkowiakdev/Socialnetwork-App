@@ -57,3 +57,10 @@ module.exports.updateBio = (bio, userId) => {
         userId,
     ]);
 };
+
+module.exports.getOtherProfile = (userId) => {
+    return db.query(
+        `SELECT first, last, profile_pic, bio FROM users WHERE id = $1`,
+        [userId]
+    );
+};
