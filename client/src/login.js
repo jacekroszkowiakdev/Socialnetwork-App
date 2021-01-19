@@ -1,7 +1,6 @@
 //client/src/api/login.js
 import { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
-import Reset from "./reset";
 import axios from "./axios";
 
 export default class Login extends Component {
@@ -23,13 +22,8 @@ export default class Login extends Component {
         console.log("handle click fired", this.state);
         axios
             .post("/api/login", this.state)
-            .then((res) => {
-                if (res.data.error) {
-                    // console.log("error in axios");
-                    this.setState({ error: true });
-                } else {
-                    location.replace("/");
-                }
+            .then(() => {
+                location.replace("/");
             })
             .catch((err) => {
                 console.log(`axios.post("/api/login") error: `, err);

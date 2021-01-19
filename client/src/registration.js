@@ -29,12 +29,8 @@ export default class Registration extends Component {
         // console.log("event object: ", evt);
         // console.log("evt.target.value: ", evt.target.value);
         // console.log("evt.target.name: ", evt.target.name);
-        //take the user input and store it in state. Two things are needed:
-        // 1.what is the user typing (evt.target.value) and
-        // 2.which input field is user typing in (evt.target.name)
+
         this.setState({
-            // evt.target.name needs to be the property
-            // square brackets syntax is needed to inform that the property is a js. value!
             [evt.target.name]: evt.target.value,
         });
     }
@@ -51,10 +47,10 @@ export default class Registration extends Component {
         axios
             .post("/api/register", this.state)
             .then((res) => {
-                if (!res.data.success) {
-                    this.setState({ error: true });
-                } else {
+                if (!res.data.error) {
                     location.replace("/");
+                } else {
+                    this.setState({ error: true });
                 }
             })
             .catch((err) => {
@@ -67,38 +63,40 @@ export default class Registration extends Component {
                 {this.state.error && (
                     <p>`Something went wrong :( please try again `</p>
                 )}
-                <h1>Registration</h1>
-                <input
-                    onChange={(evt) => this.handleChange(evt)}
-                    name="first"
-                    placeholder="first name"
-                    type="text"
-                    required
-                />
-                <input
-                    onChange={(evt) => this.handleChange(evt)}
-                    name="last"
-                    placeholder="last name"
-                    type="text"
-                    required
-                />
-                <input
-                    onChange={(evt) => this.handleChange(evt)}
-                    name="email"
-                    placeholder="email address"
-                    type="text"
-                    required
-                />
-                <input
-                    onChange={(evt) => this.handleChange(evt)}
-                    name="password"
-                    placeholder="password"
-                    type="password"
-                    required
-                />
-                <button onClick={() => this.handleClick()}>Submit</button>
-                <p>I have an account</p>
-                <Link to="/api/login">Click here to Log in!</Link>
+                <div className="registration-container">
+                    <h1>Registration</h1>
+                    <input
+                        onChange={(evt) => this.handleChange(evt)}
+                        name="first"
+                        placeholder="first name"
+                        type="text"
+                        required
+                    />
+                    <input
+                        onChange={(evt) => this.handleChange(evt)}
+                        name="last"
+                        placeholder="last name"
+                        type="text"
+                        required
+                    />
+                    <input
+                        onChange={(evt) => this.handleChange(evt)}
+                        name="email"
+                        placeholder="email address"
+                        type="text"
+                        required
+                    />
+                    <input
+                        onChange={(evt) => this.handleChange(evt)}
+                        name="password"
+                        placeholder="password"
+                        type="password"
+                        required
+                    />
+                    <button onClick={() => this.handleClick()}>Submit</button>
+                    <p>I have an account</p>
+                    <Link to="/api/login">Click here to Log in!</Link>
+                </div>
             </div>
         );
     }
