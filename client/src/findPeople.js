@@ -22,15 +22,21 @@ export default function FindPeople() {
     }, []);
 
     useEffect(() => {
-        axios
-            .get(`/api/find-users/${userQuery}`)
-            .then(({ data }) => {
-                setQueryResults(data);
-                console.log(`axios.get(/api/find-users data:`, data);
-            })
-            .catch((err) => {
-                console.error("error on axios.get (/api/find-users): ", err);
-            });
+        if (userQuery) {
+            axios
+                .get(`/api/find-users/${userQuery}`)
+                .then(({ data }) => {
+                    setQueryResults(data);
+                    console.log(`axios.get(/api/find-users data:`, data);
+                    console.log("user query in api/find-users/ : ", userQuery);
+                })
+                .catch((err) => {
+                    console.error(
+                        "error on axios.get (/api/find-users): ",
+                        err
+                    );
+                });
+        }
     }, [userQuery]);
 
     return (
@@ -60,7 +66,7 @@ export default function FindPeople() {
                 </div>
             )}
 
-            {queryResults > 0 && (
+            {queryResults.length > 0 && (
                 <div className="search-result-container">
                     <h2>Find members</h2>
                     <ul>
