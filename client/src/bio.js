@@ -27,8 +27,8 @@ export default class Bio extends Component {
         axios
             .post("/api/profile/bio-update", this.state)
             .then(({ data }) => {
-                console.log("data from updating bio: ", data[0].bio);
-                this.props.bioUpdater(data[0].bio);
+                this.props.bioUpdater(data);
+                console.log("bio / updateBio: ", data);
                 this.toggleTextarea();
             })
             .catch((err) => {
@@ -42,14 +42,9 @@ export default class Bio extends Component {
         });
     }
 
-    // If the user's current bio text doesn't exist (it is an empty string or undefined or null, the BioEditor component should show an "Add Bio" button.
-
-    // If the user has a bio saved, the BioEditor component should show that text, along with an "Edit Bio" button.
-
     render() {
-        console.log("props in bio: ", this.props);
         return (
-            <>
+            <div>
                 {this.state.textareaVisible && (
                     <div className="textareaBio">
                         <label>
@@ -78,10 +73,10 @@ export default class Bio extends Component {
                         className="button-bio"
                         onClick={() => this.toggleTextarea()}
                     >
-                        {!this.state.bio ? "Add Bio" : "Edit Bio"}
+                        {!this.props.bio ? "Add Bio" : "Edit Bio"}
                     </button>
                 )}
-            </>
+            </div>
         );
     }
 }

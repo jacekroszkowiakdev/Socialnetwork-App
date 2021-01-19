@@ -23,24 +23,13 @@ export default class App extends Component {
             largerPic: null,
             error: false,
         };
-        //  this makes sure that the context is kept when passing the toggleUploader method down the another component:
-        // this.toggleUploader = this.toggleUploader.bind(this);
-        // this.updateProfilePicture = this.updateProfilePicture.bind(this);
-        // this.bioUpdater = this.bioUpdater.bind(this);
     }
 
     componentDidMount() {
-        // use axios to make a request to the server to retrieve information about the user, then store that data in the state of App:
         axios
             .get("/api/profile")
             .then(({ data }) => {
                 this.setState({
-                    // first: data[0].first,
-                    // last: data[0].last,
-                    // email: data[0].email,
-                    // created_at: data[0].created_at,
-                    // profile_pic: data[0].profile_pic,
-                    // bio: data[0].bio,
                     ...data[0],
                 });
             })
@@ -72,30 +61,19 @@ export default class App extends Component {
     }
 
     toggleUploader() {
-        console.log("toggle uploader fired!");
-        /* if (!this.state.uploaderIsVisible) {
-            this.setState({
-                uploaderIsVisible: true,
-            });
-        } else {
-            this.setState({
-                uploaderIsVisible: false,
-            });
-        } */
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible,
         });
     }
 
     updateProfilePicture(newProfilePic) {
-        // any child component of App can call this function and it will update the state of App, regardless what child is called from (pass it as a prop!):
         this.setState({
             profile_pic: newProfilePic,
         });
     }
 
     bioUpdater(draftBio) {
-        console.log("APP bio in bioUpdater: ", draftBio);
+        console.log("APP draftBio in bioUpdater: ", draftBio);
         this.setState({
             bio: draftBio,
         });

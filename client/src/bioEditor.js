@@ -7,13 +7,13 @@ export default class bioEditor extends Component {
             textareaVisible: false,
         };
     }
+
     toggleTextArea() {
         this.setState({
             textareaVisible: !this.state.textareaVisible,
         });
     }
-    // You will call a method within this component, making a post request to your server, updating the value of the bio
-    // Once succesful, you will call method passed down from the App component, updating the value of "bio" in state in App
+
     render() {
         return (
             <>
@@ -24,5 +24,3 @@ export default class bioEditor extends Component {
         );
     }
 }
-
-// use onChange event handler to get bio text from textarea
