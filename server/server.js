@@ -297,6 +297,12 @@ app.get("/api/find-users/:userQuery", (req, res) => {
         });
 });
 
+//GET api/friendship-status/:otherUserId
+app.get("api/friendship-status/:otherUserId", (req, res) => {
+    const { otherUserId } = req.params;
+    db.getFriendStatus(req.session.userId, otherUserId).then(({ rows }) => {});
+});
+
 //GET /*
 app.get("*", function (req, res) {
     // if

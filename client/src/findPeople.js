@@ -19,16 +19,6 @@ export default function FindPeople() {
             .catch((err) => {
                 console.error("error on axios.get (/api/new-users): ", err);
             });
-
-        // axios
-        //     .get(`"/api/find-users/"${userQuery}`) //check
-        //     .then(({ data }) => {
-        //         setQueryResults(data.setQueryResults);
-        //         console.log(`axios.get(/api/find-users: `, data);
-        //     })
-        //     .catch((err) => {
-        //         console.error("error on axios.get (/api/find-users): ", err);
-        //     });
     }, []);
 
     useEffect(() => {
@@ -70,19 +60,21 @@ export default function FindPeople() {
                 </div>
             )}
 
-            {userQuery > 0 && (
+            {queryResults > 0 && (
                 <div className="search-result-container">
                     <h2>Find members</h2>
-                    {queryResults.map((user, idx) => (
-                        <li key={idx}>
-                            {/* <Link to={`/user/${user.id}`}> */}
-                            <img src={user.profile_pic} />
-                            <p>
-                                {user.first} {user.last}
-                            </p>
-                            {/* </Link> */}
-                        </li>
-                    ))}
+                    <ul>
+                        {queryResults.map((user, idx) => (
+                            <li key={idx}>
+                                <Link to={`/user/${user.id}`}>
+                                    <img src={user.profile_pic} />
+                                    <p>
+                                        {user.first} {user.last}
+                                    </p>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
 
