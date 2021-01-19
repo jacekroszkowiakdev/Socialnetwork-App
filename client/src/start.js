@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import App from "./app";
+import { init } from "./socket";
 // import Redux stuff:
 // import { createStore, applyMiddleware } from "redux";
 // import { Provider } from "react-redux";
@@ -30,6 +31,7 @@ let element;
 if (location.pathname === "/welcome") {
     element = <Welcome />;
 } else {
+    // init(store); // connecting socket with Redux
     element = <App />;
 }
 

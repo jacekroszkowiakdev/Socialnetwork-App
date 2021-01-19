@@ -72,8 +72,9 @@ module.exports.getLatestUsers = () => {
 };
 
 module.exports.searchUsers = (userQuery) => {
+    console.log("user query in DB: ", userQuery);
     return db.query(
-        `SELECT id, first, last, profile_pic FROM users WHERE first ILIKE $1 OR last ILIKE $1 ODRER BY id DESC`,
-        ["%" + userQuery + "%"]
+        `SELECT id, first, last, profile_pic FROM users WHERE first ILIKE $1 OR last ILIKE $1 ORDER BY id DESC`,
+        [userQuery + "%"]
     );
 };

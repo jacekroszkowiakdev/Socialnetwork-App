@@ -12,6 +12,12 @@ const s3 = require("./s3");
 const { s3Url } = require("./config.json");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
+// io.socket stuff:
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
 
 // Middleware:
 const diskStorage = multer.diskStorage({
@@ -32,12 +38,18 @@ const uploader = multer({
     },
 });
 
-app.use(
-    cookieSession({
-        secret: `Grzegorz Brzęczyszczykiewicz`,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: `Grzegorz Brzęczyszczykiewicz`,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+});
+
+// io.socket stuff:
+app.use(cookieSessionMiddleware);
+
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
 app.use(csurf());
 
 app.use(function (req, res, next) {
@@ -272,10 +284,12 @@ app.get("/api/new-users", (req, res) => {
 });
 
 //GET api/find-users
-app.get("/api/find-users", (req, res) => {
-    db.searchUsers()
+app.get("/api/find-users/:userQuery", (req, res) => {
+    const { userQuery } = req.params;
+    db.searchUsers(userQuery)
         .then(({ rows }) => {
             res.json(rows);
+            console.log("find users rows: ", rows);
         })
         .catch((err) => {
             console.log("error while finding users in DB: ", err);
@@ -297,6 +311,18 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(process.env.PORT || 3001, function () {
+// to make io.socket work app needs to be replaced with server!
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
+
+// socket id code goes here:
+// io.on("connection", (socket) => {
+//     console.log("socket with id ${socket.id} just connected");
+//     // every user will have two ID's:
+//     // -socket.id that is the ID socket.io will assign to every user
+//     // -userId - that is the ID we assign to user when they login/register (socket.request.session.userId)
+
+//     // req.session DOES NOT WORK HERE because we don't have a request object,
+//     // if in your POST /registration and POST/login routes - DON'T assign userId to req.session then "socket.request"
+// });

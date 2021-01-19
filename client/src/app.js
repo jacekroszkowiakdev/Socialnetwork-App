@@ -4,6 +4,7 @@ import OtherProfile from "./otherProfile";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+import FindPeople from "./findPeople";
 import axios from "./axios";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -153,6 +154,7 @@ export default class App extends Component {
                             )}
                         />
                     </Switch>
+                    <Route exact path="/users" render={() => <FindPeople />} />
                 </div>
             </BrowserRouter>
         );
