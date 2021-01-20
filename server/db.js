@@ -79,7 +79,7 @@ module.exports.searchUsers = (userQuery) => {
 
 module.exports.getFriendStatus = (userId, otherUserId) => {
     return db.query(
-        `SELECT * FROM friendships WHERE (sender_id =$1, recipient_id = $2) OR (sender_id = $2, recipient_id = $1)`,
+        `SELECT * FROM friendships WHERE (sender_id =$1 AND recipient_id = $2) OR (sender_id = $2 AND recipient_id = $1)`,
         [userId, otherUserId]
     );
 };
@@ -93,7 +93,7 @@ module.exports.acceptFriendship = (userId, otherUserId) => {
 
 module.exports.rejectFriendship = (userId, otherUserId) => {
     return db.query(
-        `DELETE * FROM friendships WHERE (sender_id =$1, recipient_id = $2) OR (sender_id = $2, recipient_id = $1*)`,
+        `DELETE FROM friendships WHERE (sender_id =$1 AND recipient_id = $2) OR (sender_id = $2 AND recipient_id = $1)`,
         [userId, otherUserId]
     );
 };

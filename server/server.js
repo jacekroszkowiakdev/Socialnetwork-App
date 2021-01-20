@@ -281,13 +281,13 @@ app.get("/api/find-users/:userQuery", (req, res) => {
 });
 
 //GET api/friendship-status/:otherUserId
-app.get("api/friendship-status/:otherUserId", (req, res) => {
+app.get("/api/friendship-status/:otherUserId", (req, res) => {
     const { otherUserId } = req.params;
     console.log("friendship status otherUserId", req.params);
     db.getFriendStatus(req.session.userId, otherUserId)
         .then(({ rows }) => {
             console.log("friendship status rows", rows);
-            if (rows[0].length == 0) {
+            if (rows.length == 0) {
                 res.json({ friends: false });
                 console.log("rows empty, no friendship!");
             } else if (rows[0].accepted) {
@@ -308,7 +308,7 @@ app.get("api/friendship-status/:otherUserId", (req, res) => {
 });
 
 //POST api/friendship-action/
-app.post("api/friendship-action", (req, res) => {
+app.post("/api/friendship-action", (req, res) => {
     const BUTTON_TXT = {
         BEFRIEND: "Send Request",
         UNFRIEND: "Unfriend",
@@ -321,6 +321,7 @@ app.post("api/friendship-action", (req, res) => {
         db.acceptFriendship(req.session.userId, otherUserId)
             .then(() => {
                 res.json({ changeButtonAction: BUTTON_TXT.UNFRIEND });
+                console.log("AcceptFriendship, button change to: ", res.json);
             })
             .catch((err) => {
                 console.log("error in db.acceptFriend : ", err);
@@ -330,18 +331,26 @@ app.post("api/friendship-action", (req, res) => {
         db.rejectFriendship(req.session.userId, otherUserId)
             .then(() => {
                 res.json({ changeButtonAction: BUTTON_TXT.BEFRIEND });
+                console.log("RejectFriendship, button change to: ", res.json);
             })
             .catch((err) => {
-                console.log("CANCEL - error in db.rejectFriend : ", err);
+                console.log(
+                    "CANCEL or UNFRIEND - error in db.rejectFriendship : ",
+                    err
+                );
                 res.json({ error: true });
             });
     } else if (action === BUTTON_TXT.BEFRIEND) {
         db.sendFriendshipRequest(req.session.userId, otherUserId)
             .then(() => {
                 res.json({ changeButtonAction: BUTTON_TXT.BEFRIEND });
+                console.log("sendFriendship button change to: ", res.json);
             })
             .catch((err) => {
-                console.log("UNFRIEND - error in db.rejectFriend : ", err);
+                console.log(
+                    "BEFRIEND - error in db.sendFriendshipRequest : ",
+                    err
+                );
                 res.json({ error: true });
             });
     }

@@ -16,7 +16,7 @@ export default function FriendButton({ otherUserId }) {
 
     useEffect(() => {
         axios
-            .get(`api/friendship-status/${otherUserId}`)
+            .get(`/api/friendship-status/${otherUserId}`)
             .then(({ data }) => {
                 if (data.pendingRequest) {
                     if (data.otherUserRequest) {
@@ -45,15 +45,16 @@ export default function FriendButton({ otherUserId }) {
 
     function handleClick() {
         axios
-            .post("/friendship-action", {
+            .post("/api/friendship-action", {
                 action: buttonAction,
                 otherUserId: otherUserId,
             })
             .then(({ data }) => {
-                setButtonAction(data.changeButtonAction); // check or data.changeButtonText or something like
+                setButtonAction(data.changeButtonAction);
+                console.log("handle click fired with action: ", data);
             })
             .catch((err) => {
-                console.error(`axios.get(/friendship-action error: `, err);
+                console.log(`axios.get(/friendship-action error: `, err);
                 setError(true);
             });
     }
