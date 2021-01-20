@@ -68,15 +68,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// redirection:
-app.get("/welcome", (req, res) => {
-    if (req.session.userId) {
-        res.redirect("/");
-    } else {
-        res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-    }
-});
-
 // POST /api/register
 app.post("/api/register", (req, res) => {
     const { first, last, email, password } = req.body;
@@ -196,14 +187,6 @@ app.get("/api/profile", (req, res) => {
     const id = req.session.userId;
     db.getProfileInfo(id)
         .then(({ rows }) => {
-            // const { first, last, email, created_at, profile_pic } = rows[0];
-            // res.json({
-            //     id: req.session.userId,
-            //     first: first,
-            //     last: last,
-            //     email: email,
-            //     created_at: created_at,
-            //     profile_pic: profile_pic,
             res.json(rows);
         })
         .catch((err) => {
@@ -300,7 +283,77 @@ app.get("/api/find-users/:userQuery", (req, res) => {
 //GET api/friendship-status/:otherUserId
 app.get("api/friendship-status/:otherUserId", (req, res) => {
     const { otherUserId } = req.params;
-    db.getFriendStatus(req.session.userId, otherUserId).then(({ rows }) => {});
+    console.log("friendship status otherUserId", req.params);
+    db.getFriendStatus(req.session.userId, otherUserId)
+        .then(({ rows }) => {
+            console.log("friendship status rows", rows);
+            if (rows[0].length == 0) {
+                res.json({ friends: false });
+                console.log("rows empty, no friendship!");
+            } else if (rows[0].accepted) {
+                res.json({ friends: true });
+                console.log("friendship accepted!");
+            } else if (
+                !rows[0].accepted &&
+                req.session.userId == rows[0].recipient_id
+            ) {
+                res.json({ pendingRequest: true, otherUserRequest: true });
+                console.log("request is pending users accept");
+            }
+        })
+        .catch((err) => {
+            console.log("error while checking friend status in DB: ", err);
+            res.json({ error: true });
+        });
+});
+
+//POST api/friendship-action/
+app.post("api/friendship-action", (req, res) => {
+    const BUTTON_TXT = {
+        BEFRIEND: "Send Request",
+        UNFRIEND: "Unfriend",
+        ACCEPT: "Accept Request",
+        CANCEL: "Cancel Request",
+    };
+
+    const { action, otherUserId } = req.body;
+    if (action === BUTTON_TXT.ACCEPT) {
+        db.acceptFriendship(req.session.userId, otherUserId)
+            .then(() => {
+                res.json({ changeButtonAction: BUTTON_TXT.UNFRIEND });
+            })
+            .catch((err) => {
+                console.log("error in db.acceptFriend : ", err);
+                res.json({ error: true });
+            });
+    } else if (action === BUTTON_TXT.CANCEL || BUTTON_TXT.UNFRIEND) {
+        db.rejectFriendship(req.session.userId, otherUserId)
+            .then(() => {
+                res.json({ changeButtonAction: BUTTON_TXT.BEFRIEND });
+            })
+            .catch((err) => {
+                console.log("CANCEL - error in db.rejectFriend : ", err);
+                res.json({ error: true });
+            });
+    } else if (action === BUTTON_TXT.BEFRIEND) {
+        db.sendFriendshipRequest(req.session.userId, otherUserId)
+            .then(() => {
+                res.json({ changeButtonAction: BUTTON_TXT.BEFRIEND });
+            })
+            .catch((err) => {
+                console.log("UNFRIEND - error in db.rejectFriend : ", err);
+                res.json({ error: true });
+            });
+    }
+});
+
+// redirection:
+app.get("/welcome", (req, res) => {
+    if (req.session.userId) {
+        res.redirect("/");
+    } else {
+        res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+    }
 });
 
 //GET /*

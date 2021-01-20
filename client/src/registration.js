@@ -26,35 +26,21 @@ export default class Registration extends Component {
     }
 
     handleChange(evt) {
-        // console.log("event object: ", evt);
-        // console.log("evt.target.value: ", evt.target.value);
-        // console.log("evt.target.name: ", evt.target.name);
-
         this.setState({
             [evt.target.name]: evt.target.value,
         });
     }
 
     handleClick() {
-        // 1. send off user input to server using axios! POST /registration
-        // 2. in react axios needs to be imported
-        // 3. process the response:
-        // - error: render an error message:
-        // (1) put something in state that indicates that there is an error. like error: true;
-        // (2) render the error message only if there is an error - we are going to use the conditional rendering option here
-        // - success: redirect user to / using /: location.replace('/');
         console.log("handle click fired", this.state);
         axios
             .post("/api/register", this.state)
-            .then((res) => {
-                if (!res.data.error) {
-                    location.replace("/");
-                } else {
-                    this.setState({ error: true });
-                }
+            .then(() => {
+                location.replace("/");
             })
             .catch((err) => {
                 console.log("POST /api/register error", err);
+                this.setState({ error: true });
             });
     }
     render() {

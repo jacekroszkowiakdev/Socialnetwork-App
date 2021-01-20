@@ -28,8 +28,7 @@ module.exports.addResetCode = (email, code) => {
 
 module.exports.verifyResetCode = () => {
     return db.query(
-        `SELECT code FROM codes
-WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`
+        `SELECT code FROM codes WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`
     );
 };
 
@@ -72,9 +71,36 @@ module.exports.getLatestUsers = () => {
 };
 
 module.exports.searchUsers = (userQuery) => {
-    console.log("user query in DB: ", userQuery);
     return db.query(
         `SELECT id, first, last, profile_pic FROM users WHERE first ILIKE $1 OR last ILIKE $1 ORDER BY id DESC`,
         [userQuery + "%"]
+    );
+};
+
+module.exports.getFriendStatus = (userId, otherUserId) => {
+    return db.query(
+        `SELECT * FROM friendships WHERE (sender_id =$1, recipient_id = $2) OR (sender_id = $2, recipient_id = $1)`,
+        [userId, otherUserId]
+    );
+};
+
+module.exports.acceptFriendship = (userId, otherUserId) => {
+    return db.query(
+        `UPDATE friendships SET accepted = true WHERE recipient_id = $1 AND sender_id = $2 RETURNING accepted`,
+        [userId, otherUserId]
+    );
+};
+
+module.exports.rejectFriendship = (userId, otherUserId) => {
+    return db.query(
+        `DELETE * FROM friendships WHERE (sender_id =$1, recipient_id = $2) OR (sender_id = $2, recipient_id = $1*)`,
+        [userId, otherUserId]
+    );
+};
+
+module.exports.sendFriendshipRequest = (userId, otherUserId) => {
+    return db.query(
+        `INSERT INTO friendships (sender_id, recipient_id) VALUES ($1, $2) RETURNING *`,
+        [userId, otherUserId]
     );
 };

@@ -19,15 +19,12 @@ export default class OtherProfile extends Component {
     }
 
     componentDidMount() {
-        console.log("other profile component did mount!");
-        console.log("props in other profile!!!", this.props.id);
         axios
             .get(`/api/other-user/${this.props.match.params.id}`)
             .then(({ data }) => {
                 if (data.loggedIn) {
                     this.props.history.push("/");
                 } else {
-                    console.log("Other profile data: ", data);
                     this.setState({ ...data[0] });
                 }
             })
@@ -41,7 +38,7 @@ export default class OtherProfile extends Component {
     }
 
     render() {
-        console.log("OP props: ", this.props);
+        console.log("FriendButton props: ", this.props.match.params.id);
         return (
             <div className="other-profile-container">
                 <ProfilePic
