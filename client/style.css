@@ -8,6 +8,7 @@ body {
     background-size: cover;
     background-position: center;
     object-fit: fill;
+    box-sizing: border-box;
 }
 
 .intro {
@@ -57,3 +58,83 @@ body {
 .login {
     margin-top: 10px;
 }
+
+.top_bar_logo {
+    height: 35px;
+    width: 200px;
+    padding: 10px;
+    margin-left: 45px;
+    align-self: center;
+}
+
+.logout {
+    width: 60px;
+    justify-self: center;
+    align-self: center;
+}
+
+.appMessage {
+    color: black;
+    padding: 20px;
+    width: 300px;
+    justify-self: center;
+    align-self: center;
+}
+
+.top_bar {
+    width: 100%;
+    height: 10vh;
+    display: grid;
+    grid-template-columns: 1fr 300px 150px;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: white;
+    padding-bottom: 5px;
+}
+
+.app_profile_container {
+    bottom: 250px;
+    display: grid;
+    grid-template-rows: 100px 20px 200px auto;
+    background-color: white;
+    height: 400px;
+    width: 330px;
+    border-radius: 5px;
+    margin: 25px;
+    margin-bottom: 35px;
+    opacity: 0.9;
+}
+
+.userName {
+    padding: 10px;
+    grid-row-start: 2;
+    justify-self: center;
+    align-self: center;
+}
+
+.profilePic {
+    grid-row-start: 1;
+    width: 200px;
+    height: 200px;
+    border: solid white 10px;
+    border-radius: 120px;
+    margin: 50px;
+    margin-top: -110px;
+}
+
+.userBio {
+    grid-row-start: 3;
+}
+
+.profile_container {
+    grid-row-start: 4;
+    background-color: grey;
+}
+
+/* .modal {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(216, 30, 52, 0.5);
+    position: fixed;
+    top: 0;
+} */

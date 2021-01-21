@@ -83,56 +83,78 @@ export default class App extends Component {
         return (
             <BrowserRouter>
                 <div>
-                    <h1>App component</h1>
-                    <button className="logout" onClick={() => this.logout()}>
-                        Logout
-                    </button>
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        profile_pic={this.state.profile_pic}
-                        toggleUploader={() => this.toggleUploader()}
-                    />
-                    <p className="userName">{this.state.first}</p>
-                    <p>{this.state.bio}</p>
-                    {this.state.uploaderIsVisible && (
-                        <Uploader
-                            profile_pic={this.state.profile_pic}
-                            toggleUploader={() => this.toggleUploader}
-                            updateProfilePicture={(newProfilePic) =>
-                                this.updateProfilePicture(newProfilePic)
-                            }
+                    <div className="top_bar">
+                        <img
+                            className="top_bar_logo"
+                            src="/komrades.png"
+                            alt="social network logo"
                         />
-                    )}
-                    <Switch>
+                        <h4 className="appMessage">
+                            Komrade you are logged in with #id{this.state.id}!
+                        </h4>
+                        <button
+                            className="logout"
+                            onClick={() => this.logout()}
+                        >
+                            Logout
+                        </button>
+                    </div>
+                    <div className="app_profile_container">
+                        <ProfilePic
+                            first={this.state.first}
+                            last={this.state.last}
+                            profile_pic={this.state.profile_pic}
+                            toggleUploader={() => this.toggleUploader()}
+                        />
+                        <p className="userName">
+                            {this.state.first} {this.state.last}
+                        </p>
+                        <p className="userBio">{this.state.bio}</p>
+                        {this.state.uploaderIsVisible && (
+                            <Uploader
+                                profile_pic={this.state.profile_pic}
+                                toggleUploader={() => this.toggleUploader}
+                                updateProfilePicture={(newProfilePic) =>
+                                    this.updateProfilePicture(newProfilePic)
+                                }
+                            />
+                        )}
+                        <Switch>
+                            <Route
+                                exact
+                                path="/"
+                                render={() => (
+                                    <Profile
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        profile_pic={this.state.profile_pic}
+                                        bio={this.state.bio}
+                                        toggleUploader={() =>
+                                            this.toggleUploader
+                                        }
+                                        bioUpdater={(draftBio) =>
+                                            this.bioUpdater(draftBio)
+                                        }
+                                    />
+                                )}
+                            />
+                            <Route
+                                path="/user/:id"
+                                render={(props) => (
+                                    <OtherProfile
+                                        match={props.match}
+                                        history={props.history}
+                                        key={props.match.url}
+                                    />
+                                )}
+                            />
+                        </Switch>
                         <Route
                             exact
-                            path="/"
-                            render={() => (
-                                <Profile
-                                    first={this.state.first}
-                                    last={this.state.last}
-                                    profile_pic={this.state.profile_pic}
-                                    bio={this.state.bio}
-                                    toggleUploader={() => this.toggleUploader}
-                                    bioUpdater={(draftBio) =>
-                                        this.bioUpdater(draftBio)
-                                    }
-                                />
-                            )}
+                            path="/users"
+                            render={() => <FindPeople />}
                         />
-                        <Route
-                            path="/user/:id"
-                            render={(props) => (
-                                <OtherProfile
-                                    match={props.match}
-                                    history={props.history}
-                                    key={props.match.url}
-                                />
-                            )}
-                        />
-                    </Switch>
-                    <Route exact path="/users" render={() => <FindPeople />} />
+                    </div>
                 </div>
             </BrowserRouter>
         );
