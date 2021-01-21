@@ -50,7 +50,7 @@ export default class Registration extends Component {
                     <p>`Something went wrong :( please try again `</p>
                 )}
                 <div className="registration-container">
-                    <h1>Registration</h1>
+                    <h2>Join Komrades</h2>
                     <input
                         onChange={(evt) => this.handleChange(evt)}
                         name="first"
@@ -79,9 +79,16 @@ export default class Registration extends Component {
                         type="password"
                         required
                     />
-                    <button onClick={() => this.handleClick()}>Submit</button>
-                    <p>I have an account</p>
-                    <Link to="/api/login">Click here to Log in!</Link>
+                    <button
+                        className="submit"
+                        onClick={() => this.handleClick()}
+                    >
+                        Submit
+                    </button>
+                    <p>OR</p>
+                    <Link className="login" to="/api/login">
+                        Log in!
+                    </Link>
                 </div>
             </div>
         );

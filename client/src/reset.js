@@ -27,7 +27,7 @@ export default class Reset extends Component {
         console.log("resetPassword fired", this.state);
         axios
             .post("/api/reset/start", this.state)
-            .then((res) => {
+            .then(() => {
                 this.setState({
                     error: false,
                     step: 2,

@@ -34,8 +34,8 @@ export default class Login extends Component {
         if (this.state.redirect) return <Redirect to={this.state.redirect} />;
 
         return (
-            <div>
-                <h1>Login</h1>
+            <div className="login-container">
+                <h3>Login</h3>
                 {this.state.error && (
                     <p>Something went wrong please try again</p>
                 )}
@@ -53,11 +53,17 @@ export default class Login extends Component {
                     type="password"
                     required
                 />
-                <button onClick={() => this.handleClick()}>Login</button>
-                <p>Not a registered user? Create an account</p>
-                <Link to="/">Register!</Link>
+                <button className="login" onClick={() => this.handleClick()}>
+                    Login
+                </button>
                 <p>Forgot your password?</p>
-                <Link to="/reset">Reset password</Link>
+                <Link className="reset" to="/reset">
+                    Reset password
+                </Link>
+                <p>Not a registered user? Create an account</p>
+                <Link className="register" to="/">
+                    Register!
+                </Link>
             </div>
         );
     }

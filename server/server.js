@@ -321,17 +321,15 @@ app.post("/api/friendship-action", (req, res) => {
         db.acceptFriendship(req.session.userId, otherUserId)
             .then(() => {
                 res.json({ changeButtonAction: BUTTON_TXT.UNFRIEND });
-                console.log("AcceptFriendship, button change to: ", res.json);
             })
             .catch((err) => {
                 console.log("error in db.acceptFriend : ", err);
                 res.json({ error: true });
             });
-    } else if (action === BUTTON_TXT.CANCEL || BUTTON_TXT.UNFRIEND) {
+    } else if (action === BUTTON_TXT.CANCEL || action === BUTTON_TXT.UNFRIEND) {
         db.rejectFriendship(req.session.userId, otherUserId)
             .then(() => {
                 res.json({ changeButtonAction: BUTTON_TXT.BEFRIEND });
-                console.log("RejectFriendship, button change to: ", res.json);
             })
             .catch((err) => {
                 console.log(
@@ -343,8 +341,7 @@ app.post("/api/friendship-action", (req, res) => {
     } else if (action === BUTTON_TXT.BEFRIEND) {
         db.sendFriendshipRequest(req.session.userId, otherUserId)
             .then(() => {
-                res.json({ changeButtonAction: BUTTON_TXT.BEFRIEND });
-                console.log("sendFriendship button change to: ", res.json);
+                res.json({ changeButtonAction: BUTTON_TXT.CANCEL });
             })
             .catch((err) => {
                 console.log(
