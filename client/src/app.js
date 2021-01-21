@@ -1,7 +1,7 @@
 // client/src/app.js
 import { Component } from "react";
 import OtherProfile from "./otherProfile";
-import ProfilePic from "./profilePic";
+import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import FindPeople from "./findPeople";

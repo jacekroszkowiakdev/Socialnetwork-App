@@ -1,6 +1,6 @@
 //client/src/profile.js
 
-import ProfilePic from "./profilePic";
+import ProfilePic from "./profilepic";
 import Bio from "./bio";
 
 export default function Profile(props) {
