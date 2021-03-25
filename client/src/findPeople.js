@@ -27,14 +27,9 @@ export default function FindPeople() {
                 .get(`/api/find-users/${userQuery}`)
                 .then(({ data }) => {
                     setQueryResults(data);
-                    console.log(`axios.get(/api/find-users data:`, data);
-                    console.log("user query in api/find-users/ : ", userQuery);
                 })
                 .catch((err) => {
-                    console.error(
-                        "error on axios.get (/api/find-users): ",
-                        err
-                    );
+                    console.log("error on axios.get (/api/find-users): ", err);
                 });
         }
     }, [userQuery]);
@@ -44,6 +39,7 @@ export default function FindPeople() {
             <div className="search-user-container">
                 <h3>Looking for your friends?</h3>
                 <input
+                    className="search_field"
                     onChange={(evt) => setUserQuery(evt.target.value)}
                     type="text"
                     placeholder="search for friends here..."
@@ -59,7 +55,10 @@ export default function FindPeople() {
                                 <p>
                                     {user.first} {user.last}
                                 </p>
-                                <img src={user.profile_pic} />
+                                <img
+                                    className="otherPic"
+                                    src={user.profile_pic}
+                                />
                             </li>
                         ))}
                     </ul>

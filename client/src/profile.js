@@ -13,10 +13,6 @@ export default function Profile(props) {
                     alt={props.first}
                 />
             )}
-
-            <h4>
-                {props.first} {props.last}
-            </h4>
             <Bio bio={props.bio} bioUpdater={props.bioUpdater} />
         </div>
     );
